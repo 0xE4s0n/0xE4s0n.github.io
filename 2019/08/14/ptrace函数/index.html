@@ -70,7 +70,7 @@
 <meta property="og:site_name" content="0xE4s0n的博客">
 <meta property="og:description" content="ptrace 函数简介函数原型123#include &amp;lt;sys/ptrace.h&amp;gt;long ptrace（enum _ptrace_request request,pid_t pid,void * addr ,void *data）;  参数意义 request：请求ptrace执行的操作  pid：目标进程的ID  addr：目标进程的地址  data：根据request的不同而变化">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:image" content="https://img2018.cnblogs.com/blog/1414775/201906/1414775-20190618175009412-1155621983.png">
+<meta property="og:image" content="https://i.loli.net/2019/08/14/KtmlU61q5J4OPz7.png">
 <meta property="og:image" content="https://i.loli.net/2019/08/14/YQjikwv1FcmyVWH.png">
 <meta property="og:image" content="https://i.loli.net/2019/08/14/4YGNst38d2kwX7M.png">
 <meta property="og:image" content="https://i.loli.net/2019/08/14/jkwH3vUEAnsNbC2.png">
@@ -82,11 +82,11 @@
 <meta property="og:image" content="https://i.loli.net/2019/08/14/xqY1XHKJTCQWuet.png">
 <meta property="og:image" content="https://i.loli.net/2019/08/14/KyZ5oX2nIt9EVuG.png">
 <meta property="og:image" content="https://i.loli.net/2019/08/14/ifrTU6M3X2gocPw.png">
-<meta property="og:updated_time" content="2019-08-14T14:59:59.903Z">
+<meta property="og:updated_time" content="2019-08-14T15:04:59.815Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="ptrace函数">
 <meta name="twitter:description" content="ptrace 函数简介函数原型123#include &amp;lt;sys/ptrace.h&amp;gt;long ptrace（enum _ptrace_request request,pid_t pid,void * addr ,void *data）;  参数意义 request：请求ptrace执行的操作  pid：目标进程的ID  addr：目标进程的地址  data：根据request的不同而变化">
-<meta name="twitter:image" content="https://img2018.cnblogs.com/blog/1414775/201906/1414775-20190618175009412-1155621983.png">
+<meta name="twitter:image" content="https://i.loli.net/2019/08/14/KtmlU61q5J4OPz7.png">
   <link rel="canonical" href="http://yoursite.com/2019/08/14/ptrace函数/">
 
 
@@ -288,7 +288,7 @@
                 
               
 
-              <time title="创建时间：2019-08-14 22:57:45 / 修改时间：22:59:59" itemprop="dateCreated datePublished" datetime="2019-08-14T22:57:45+08:00">2019-08-14</time>
+              <time title="创建时间：2019-08-14 22:57:45 / 修改时间：23:04:59" itemprop="dateCreated datePublished" datetime="2019-08-14T22:57:45+08:00">2019-08-14</time>
             </span>
           
             
@@ -343,7 +343,7 @@
 <li><p><code>data</code>：根据<code>request</code>的不同而变化，向目标进程写入数据时，<code>data</code>存放要写入的数据的地址；从目标进程中读数据时，<code>data</code>接收返回数据的地址<br><br><br>  </p>
 </li>
 </ul>
-<p><code>request</code>参数决定<code>ptrace</code>的行为以及后续的参数是如何被使用的，参数<code>request</code>的常用的值如下：<br> <img src="https://img2018.cnblogs.com/blog/1414775/201906/1414775-20190618175009412-1155621983.png" alt>  </p>
+<p><code>request</code>参数决定<code>ptrace</code>的行为以及后续的参数是如何被使用的，参数<code>request</code>的常用的值如下：<br><img src="https://i.loli.net/2019/08/14/KtmlU61q5J4OPz7.png" alt="image.png">  </p>
 <blockquote>
 <p>更多参数请移步<a href="http://man7.org/linux/man-pages/man2/ptrace.2.html" target="_blank" rel="noopener">官方文档</a>　　 参数对应值参考<code>/usr/include/linux/ptrace.h</code><a href="https://0xe4s0n.github.io/download/De1ctf/ptrace.h" target="_blank" rel="noopener">源码</a>  </p>
 </blockquote>
