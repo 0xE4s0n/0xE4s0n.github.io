@@ -1,0 +1,1421 @@
+<!DOCTYPE html>
+
+
+
+
+
+<html class="theme-next pisces" lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="generator" content="Hexo 3.9.0">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="google-site-verification" content="5kQ1pLcJBOrSXQ4-tRz_R_V6TfGCs1Jls9WuWt6-l6w">
+  <meta name="sogou_site_verification" content="nOkR7Wa5yE">
+  <meta name="360-site-verification" content="998ba408010b57a9856982d547a1cf5c">
+  <meta name="baidu-site-verification" content="pO45hC5Gb2">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/headicon.png?v=7.2.0">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/headicon.png?v=7.2.0">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/headicon.png?v=7.2.0">
+  <link rel="mask-icon" href="/images/headicon.svg?v=7.2.0" color="#222">
+
+<link rel="stylesheet" href="/css/main.css?v=7.2.0">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css?v=4.7.0">
+    
+  
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/fancybox/2.1.5/jquery.fancybox.min.css">
+
+
+<script id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '7.2.0',
+    sidebar: {"position":"left","display":"post","offset":12,"onmobile":false},
+    back2top: {"enable":true,"sidebar":true,"scrollpercent":true},
+    copycode: {"enable":true,"show_result":true,"style":"mac"},
+    fancybox: true,
+    mediumzoom: false,
+    lazyload: false,
+    pangu: false,
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    },
+    localsearch: {"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
+    search: {
+      root: '/',
+      path: ''
+    },
+    tabs: true,
+    motion: {"enable":false,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    translation: {
+      copy_button: '复制',
+      copy_success: '复制成功',
+      copy_failure: '复制失败'
+    }
+  };
+</script>
+
+  <meta name="description" content="Smali背景　　Smali，Baksmali分别是指安卓系统里的Java虚拟机（Dalvik）所使用的一种.dex格式文件的汇编器，反汇编器。其语法是一种宽松式的Jasmin/dedexer语法，而且它实现了.dex格式所有功能（注解，调试信息，线路信息等）。　　Smali，Baksmali分别是冰岛语中编译器，反编译器的叫法。也许你会问为什么是冰岛语呢，因为Dalvik是一个冰岛渔村名字。 简">
+<meta name="keywords" content="re,Android">
+<meta property="og:type" content="article">
+<meta property="og:title" content="smail语法">
+<meta property="og:url" content="http://yoursite.com/2019/07/27/smali语法/index.html">
+<meta property="og:site_name" content="0xE4s0n的博客">
+<meta property="og:description" content="Smali背景　　Smali，Baksmali分别是指安卓系统里的Java虚拟机（Dalvik）所使用的一种.dex格式文件的汇编器，反汇编器。其语法是一种宽松式的Jasmin/dedexer语法，而且它实现了.dex格式所有功能（注解，调试信息，线路信息等）。　　Smali，Baksmali分别是冰岛语中编译器，反编译器的叫法。也许你会问为什么是冰岛语呢，因为Dalvik是一个冰岛渔村名字。 简">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2019-08-12T08:52:38.182Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="smail语法">
+<meta name="twitter:description" content="Smali背景　　Smali，Baksmali分别是指安卓系统里的Java虚拟机（Dalvik）所使用的一种.dex格式文件的汇编器，反汇编器。其语法是一种宽松式的Jasmin/dedexer语法，而且它实现了.dex格式所有功能（注解，调试信息，线路信息等）。　　Smali，Baksmali分别是冰岛语中编译器，反编译器的叫法。也许你会问为什么是冰岛语呢，因为Dalvik是一个冰岛渔村名字。 简">
+  <link rel="canonical" href="http://yoursite.com/2019/07/27/smali语法/">
+
+
+<script id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>smail语法 | 0xE4s0n的博客</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .motion-element,
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-title { opacity: initial; }
+
+  .use-motion .logo,
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta">
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">0xE4s0n的博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+    <ul id="menu" class="menu">
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+      
+    
+      
+    
+
+    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br/>首页</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-about">
+      
+    
+      
+    
+
+    <a href="/about/" rel="section"><i class="menu-item-icon fa fa-fw fa-user"></i> <br/>关于</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+      
+    
+      
+    
+
+    <a href="/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i> <br/>标签<span class="badge">5</span></a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+      
+    
+      
+    
+
+    <a href="/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i> <br/>分类<span class="badge">4</span></a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+      
+    
+      
+    
+
+    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br/>归档<span class="badge">9</span></a>
+
+  </li>
+    </ul>
+</nav>
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+            
+
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/07/27/smali语法/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="0xE4s0n">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/headicon.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="0xE4s0n的博客">
+    </span>
+      <header class="post-header">
+
+        
+          <h1 class="post-title" itemprop="name headline">smail语法
+
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2019-07-27 15:23:44" itemprop="dateCreated datePublished" datetime="2019-07-27T15:23:44+08:00">2019-07-27</time>
+            </span>
+          
+            
+
+            
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2019-08-12 16:52:38" itemprop="dateModified" datetime="2019-08-12T16:52:38+08:00">2019-08-12</time>
+              </span>
+            
+          
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Android/" itemprop="url" rel="index"><span itemprop="name">Android</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon"
+              >
+                <i class="fa fa-eye"></i>
+                 阅读次数： 
+                <span class="busuanzi-value" id="busuanzi_value_page_pv"></span>
+              </span>
+            </span>
+          <br/>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h1 id="Smali背景"><a href="#Smali背景" class="headerlink" title="Smali背景"></a>Smali背景</h1><p>　　Smali，Baksmali分别是指安卓系统里的Java虚拟机（Dalvik）所使用的一种.dex格式文件的汇编器，反汇编器。其语法是一种宽松式的Jasmin/dedexer语法，而且它实现了.dex格式所有功能（注解，调试信息，线路信息等）。<br>　　Smali，Baksmali分别是冰岛语中编译器，反编译器的叫法。也许你会问为什么是冰岛语呢，因为Dalvik是一个冰岛渔村名字。</p>
+<h1 id="简单介绍"><a href="#简单介绍" class="headerlink" title="简单介绍"></a>简单介绍</h1><p>　　Davlik字节码中，寄存器都是32位的，能够支持任何类型，64位类型（Long/Double）用2个寄存器表示；<br>　　根据一些文档说明，以及实践检测，<strong>Dalvik字节码有两种类型：原始类型；引用类型。</strong>熟悉JAVA的同学，应该很快能够反应过来，原始类型也就是我们JAVA中的8中基础类型；引用类型，在smali中主要是对象和数组。事实上smali语法就是根据java来的，可以理解成java的一种变种。</p>
+<h1 id="基本类型-原始类型"><a href="#基本类型-原始类型" class="headerlink" title="基本类型(原始类型)"></a>基本类型(原始类型)</h1><table>
+<thead>
+<tr>
+<th>类型关键字</th>
+<th>对应Java中的类型说明</th>
+<th>位数</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>V</td>
+<td>void</td>
+<td>0</td>
+</tr>
+<tr>
+<td>Z</td>
+<td>boolean</td>
+<td>4</td>
+</tr>
+<tr>
+<td>B</td>
+<td>byte</td>
+<td>8</td>
+</tr>
+<tr>
+<td>S</td>
+<td>short</td>
+<td>16</td>
+</tr>
+<tr>
+<td>C</td>
+<td>char</td>
+<td>16</td>
+</tr>
+<tr>
+<td>I</td>
+<td>int</td>
+<td>32</td>
+</tr>
+<tr>
+<td>J</td>
+<td>long</td>
+<td>64</td>
+</tr>
+<tr>
+<td>F</td>
+<td>float</td>
+<td>32</td>
+</tr>
+<tr>
+<td>D</td>
+<td>double</td>
+<td>64</td>
+</tr>
+</tbody></table>
+<h1 id="引用类型"><a href="#引用类型" class="headerlink" title="引用类型"></a>引用类型</h1><h2 id="对象类型"><a href="#对象类型" class="headerlink" title="对象类型"></a>对象类型</h2><p>　　Object类型，即引用类型的对象，在引用时，使用L开头，后面紧接着的是完整的包名，比如：<code>java.lang.String</code>对应的Smali语法则是<code>Ljava/lang/String</code></p>
+<h2 id="数组类型"><a href="#数组类型" class="headerlink" title="数组类型"></a>数组类型</h2><p>　　一维数组在类型的左边加一个方括号，比如：<code>[I</code>等同于Java的<code>int[]</code>，每多一维就加一个方括号，最多可以设置255维</p>
+<h1 id="方法声明及调用"><a href="#方法声明及调用" class="headerlink" title="方法声明及调用"></a>方法声明及调用</h1><pre><code>Lpackage/name/ObjectName;-&gt;MethodName(III)Z</code></pre><p>　　第一部分<code>Lpackage/name/ObjectName;</code>用于声明具体的类型，以便JVM寻找<br>　　第二部分<code>MethodName(III)Z</code>，其中<code>MethodName</code>为具体的方法名，()中的字符，表示了参数数量和类型，即3个int型参数，Z为返回值的类型，即返回Boolean类型</p>
+<p><strong>如果需要调用构造方法，则MethodName为：<code>&lt;init&gt;</code></strong></p>
+<h1 id="寄存器"><a href="#寄存器" class="headerlink" title="寄存器"></a>寄存器</h1><h2 id="寄存器声明及使用"><a href="#寄存器声明及使用" class="headerlink" title="寄存器声明及使用"></a>寄存器声明及使用</h2><p>　　在Smali中，如果需要存储变量，必须先声明足够数量的寄存器，1个寄存器可以存储32位长度的类型，比如Int，而两个寄存器可以存储64位长度类型的数据，比如Long或Double<br>　　声明可使用的寄存器数量的方式为：<code>.registers N</code>，N代表需要的寄存器的总个数，同时，还有一个关键字<code>.locals</code>，它用于声明非参数的寄存器个数（包含在registers声明的个数当中），也叫做本地寄存器，只在一个方法内有效，但不常用，一般使用registers即可  </p>
+<h2 id="确定寄存器的个数"><a href="#确定寄存器的个数" class="headerlink" title="确定寄存器的个数"></a>确定寄存器的个数</h2><p>　　由于非static方法，需要占用一个寄存器以保存this指针，那么这类方法的寄存器个数，最低就为1，如果还需要处理传入的参数，则需要再次叠加，此时还需要考虑Double和Float这种需要占用两个寄存器的参数类型。</p>
+<h2 id="寄存器的命名方式"><a href="#寄存器的命名方式" class="headerlink" title="寄存器的命名方式"></a>寄存器的命名方式</h2><p>有两种方式——V命名方式和P命名方式。P命名方式中的第一个寄存器就是方法中的第一个参数寄存器。在下表中我们用这两种命名方式来表示有5个寄存器和3个参数的方法。</p>
+<table>
+<thead>
+<tr>
+<th>对应V寄存器</th>
+<th>对应P寄存器</th>
+<th>寄存器类型</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>v0</td>
+<td></td>
+<td>第一个local register</td>
+</tr>
+<tr>
+<td>v1</td>
+<td></td>
+<td>第二个local register</td>
+</tr>
+<tr>
+<td>v2</td>
+<td>p0</td>
+<td>第一个parameter register</td>
+</tr>
+<tr>
+<td>v3</td>
+<td>p1</td>
+<td>第二个parameter register</td>
+</tr>
+<tr>
+<td>v4</td>
+<td>p2</td>
+<td>第三个parameter register</td>
+</tr>
+</tbody></table>
+<h2 id="寄存器的命名"><a href="#寄存器的命名" class="headerlink" title="寄存器的命名"></a>寄存器的命名</h2><pre><code>.local vA, &quot;name&quot;:@type;</code></pre><p>将VA命名为name name为type类型;<br>registers待求证</p>
+<h1 id="Dalvik指令集"><a href="#Dalvik指令集" class="headerlink" title="Dalvik指令集"></a>Dalvik指令集</h1><p><strong><a href="https://source.android.com/devices/tech/dalvik/dalvik-bytecode#instructions," title="官方Dalvik文档" target="_blank" rel="noopener">https://source.android.com/devices/tech/dalvik/dalvik-bytecode#instructions</a></strong><br><strong>以下寄存器的位数与指令注意事项可在官方文档中查看</strong></p>
+<p>一般的指令格式为：<code>[op]-[type](可选)/[位宽，默认4位] [目标寄存器],[源寄存器](可选)</code>，比如：<code>move v1,v2</code>，<code>move-wide/from16 v1,v2</code></p>
+<h2 id="移位"><a href="#移位" class="headerlink" title="移位"></a>移位</h2><table>
+<thead>
+<tr>
+<th>指令</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>move v1,v2</td>
+<td>将v2中的值移入到v1寄存器中（4位，支持int型）</td>
+</tr>
+<tr>
+<td>move/from16 v1,v2</td>
+<td>将16位的v2寄存器中的值移入到8位的v1寄存器中</td>
+</tr>
+<tr>
+<td>move/16 v1,v2</td>
+<td>将16位的v2寄存器中的值移入到16位的v1寄存器中</td>
+</tr>
+<tr>
+<td>move-wide v1,v2</td>
+<td>将寄存器对（一组，用于支持双字型）v2中的值移入到v1寄存器对中（4位，猜测支持float、double型）</td>
+</tr>
+<tr>
+<td>move-wide/from16 v1,v2</td>
+<td>将16位的v2寄存器对（一组）中的值移入到8位的v1寄存器中</td>
+</tr>
+<tr>
+<td>move-wide/16 v1,v2</td>
+<td>将16位的v2寄存器对（一组）中的值移入到16位的v1寄存器中</td>
+</tr>
+<tr>
+<td>move-object v1,v2</td>
+<td>将v2中的对象指针移入到v1寄存器中</td>
+</tr>
+<tr>
+<td>move-object/from16 v1,v2</td>
+<td>将16位的v2寄存器中的对象指针移入到v1（8位）寄存器中</td>
+</tr>
+<tr>
+<td>move-object/16 v1,v2</td>
+<td>将16位的v2寄存器中的对象指针移入到v1（16位）寄存器中</td>
+</tr>
+<tr>
+<td>move-result v1</td>
+<td>将这个指令的上一条指令计算结果，移入到v1寄存器中（需要配合invoke-static、invoke-virtual等指令使用）</td>
+</tr>
+<tr>
+<td>move-result-object v1</td>
+<td>将上条计算结果的对象指针移入v1寄存器</td>
+</tr>
+<tr>
+<td>move-result-wide v1</td>
+<td>将上条计算结果（双字）的对象指针移入v1寄存器</td>
+</tr>
+<tr>
+<td>move-exception v1</td>
+<td>将异常移入v1寄存器，用于捕获try-catch语句中的异常</td>
+</tr>
+</tbody></table>
+<h2 id="返回"><a href="#返回" class="headerlink" title="返回"></a>返回</h2><table>
+<thead>
+<tr>
+<th>指令</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>return-void</td>
+<td>返回void，即直接返回</td>
+</tr>
+<tr>
+<td>return v1</td>
+<td>返回v1寄存器中的值</td>
+</tr>
+<tr>
+<td>return-object v1</td>
+<td>返回v1寄存器中的对象指针</td>
+</tr>
+<tr>
+<td>return-wide v1</td>
+<td>返回双字型结果给v1寄存器</td>
+</tr>
+</tbody></table>
+<h2 id="常量"><a href="#常量" class="headerlink" title="常量"></a>常量</h2><table>
+<thead>
+<tr>
+<th>指令</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>const/4 vA, #+B</td>
+<td>将4位常量B符号扩展为32位赋值给vA寄存器</td>
+</tr>
+<tr>
+<td>const/16 vAA, #+BBBB</td>
+<td>将16位常量B符号扩展为32位赋值给vA寄存器</td>
+</tr>
+<tr>
+<td>const vAA, #+BBBBBBBB</td>
+<td>将32位常量B赋值给vA寄存器</td>
+</tr>
+<tr>
+<td>const/high16 vAA, #+BBBB0000</td>
+<td>将16位常量B右零扩展(右边添0)为32位赋值给vA寄存器</td>
+</tr>
+<tr>
+<td>const-wide/16 vAA, #+BBBB</td>
+<td>将16位常量B符号扩展为64位赋值给vA寄存器</td>
+</tr>
+<tr>
+<td>const-wide/32 vAA, #+BBBBBBBB</td>
+<td>将32位常量B符号扩展为64位赋值给vA寄存器</td>
+</tr>
+<tr>
+<td>const-wide vAA, #+BBBBBBBBBBBBBBBB</td>
+<td>将64位常量B赋值给vA寄存器</td>
+</tr>
+<tr>
+<td>const-wide/high16 vAA, #+BBBB000000000000</td>
+<td>将16位常量B右零扩展(右边添0)为64位赋值给vA寄存器</td>
+</tr>
+<tr>
+<td>const-string(/jumbo) vAA string@BBBBBBBB</td>
+<td>将字符串常量赋给vA寄存器，过长时需要加上jumbo</td>
+</tr>
+<tr>
+<td>const-class vA La/b/TargetClass</td>
+<td>将Class常量a.b.TargetClass赋值给vA，等价于a.b.TargetClass.class</td>
+</tr>
+</tbody></table>
+<h2 id="判断"><a href="#判断" class="headerlink" title="判断"></a>判断</h2><table>
+<thead>
+<tr>
+<th>指令</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>if-eq v1,v2</td>
+<td>判断两个寄存器中的值是否相等</td>
+</tr>
+<tr>
+<td>if-ne v1,v2</td>
+<td>判断两个寄存器中的值是否不相等</td>
+</tr>
+<tr>
+<td>if-lt v1,v2</td>
+<td>判断v1寄存器中的值是否小于v2寄存器中的值（lt == less than）</td>
+</tr>
+<tr>
+<td>if-ge v1,v2</td>
+<td>判断v1寄存器中的值是否大于或等于v2寄存器中的值（ge == great than or equals）</td>
+</tr>
+<tr>
+<td>if-gt v1,v2</td>
+<td>判断v1寄存器中的值是否大于v2寄存器中的值（gt == great than）</td>
+</tr>
+<tr>
+<td>if-le v1,v2</td>
+<td>判断v1寄存器中的值是否小于或等于v2寄存器中的值（le == less than or equals）</td>
+</tr>
+</tbody></table>
+<h2 id="属性"><a href="#属性" class="headerlink" title="属性"></a>属性</h2><p>属性操作的分为：取值（get）和赋值（put）<br>目标类型分为：数组（array）、实例（instance）和静态（static）三种，对应的缩写前缀就是a、i、s<br>长度类型分为：默认（什么都不写）、wide（宽，64位）、object（对象）、boolean、byte、char、short<br>指令格式：<code>[指令名] [源寄存器], [目标字段所在对象寄存器], [字段指针]</code><br>下面列出用于实例字段的指令，其中i都可以换成a或者s，分别用于操作数组字段或者静态字段</p>
+<table>
+<thead>
+<tr>
+<th>指令</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>iget</td>
+<td>取值，用于操作int这种的值类型</td>
+</tr>
+<tr>
+<td>iget-wide</td>
+<td>取值，用于操作wide型字段</td>
+</tr>
+<tr>
+<td>iget-object</td>
+<td>取值，用于操作对象引用</td>
+</tr>
+<tr>
+<td>iget-boolean</td>
+<td>取值，用于操作布尔类型</td>
+</tr>
+<tr>
+<td>iget-byte</td>
+<td>取值，用于操作字节类型</td>
+</tr>
+<tr>
+<td>iget-char</td>
+<td>取值，用于操作字符类型</td>
+</tr>
+<tr>
+<td>iget-short</td>
+<td>取值，用于操作short类型</td>
+</tr>
+<tr>
+<td>iput</td>
+<td>赋值，用于操作int这种的值类型</td>
+</tr>
+<tr>
+<td>iput-wide</td>
+<td>赋值，用于操作wide型字段</td>
+</tr>
+<tr>
+<td>iput-object</td>
+<td>赋值，用于操作对象引用</td>
+</tr>
+<tr>
+<td>iput-boolean</td>
+<td>赋值，用于操作布尔类型</td>
+</tr>
+<tr>
+<td>iput-byte</td>
+<td>赋值，用于操作字节类型</td>
+</tr>
+<tr>
+<td>iput-char</td>
+<td>赋值，用于操作字符类型</td>
+</tr>
+<tr>
+<td>iput-short</td>
+<td>赋值，用于操作short类型</td>
+</tr>
+</tbody></table>
+<h2 id="调用"><a href="#调用" class="headerlink" title="调用"></a>调用</h2><p><strong>基本格式：<code>invoke-kind {vC, vD, vE, vF, vG}, meth@BBBB</code></strong><br>其中，BBBB代表方法引用（参见上面介绍的方法定义及调用），vC~G为需要的参数</p>
+<table>
+<thead>
+<tr>
+<th>指令</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>invoke-virtual</td>
+<td>用于调用一般的，非private、非static、非final、非构造函数的方法，它的第一个参数往往会传p0，也就是this指针</td>
+</tr>
+<tr>
+<td>invoke-super</td>
+<td>用于调用父类中的方法，其他和invoke-virtual保持一致</td>
+</tr>
+<tr>
+<td>invoke-direct</td>
+<td>用于调用private修饰的方法，或者构造方法</td>
+</tr>
+<tr>
+<td>invoke-static</td>
+<td>用于调用静态方法，比如一些工具类</td>
+</tr>
+<tr>
+<td>invoke-interface</td>
+<td>用于调用interface中的方法</td>
+</tr>
+</tbody></table>
+<h2 id="数学运算"><a href="#数学运算" class="headerlink" title="数学运算"></a>数学运算</h2><table class="math">
+<thead>
+<tr>
+  <th>运算码</th>
+  <th>C 语义</th>
+  <th>备注</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td>neg-int</td>
+  <td>int32 a;<br>int32 result = -a;</td>
+  <td>一元二进制补码。</td>
+</tr>
+<tr>
+  <td>not-int</td>
+  <td>int32 a;<br>int32 result = ~a;</td>
+  <td>一元反码。</td>
+</tr>
+<tr>
+  <td>neg-long</td>
+  <td>int64 a;<br>int64 result = -a;</td>
+  <td>一元二进制补码。</td>
+</tr>
+<tr>
+  <td>not-long</td>
+  <td>int64 a;<br>int64 result = ~a;</td>
+  <td>一元反码。</td>
+</tr>
+<tr>
+  <td>neg-float</td>
+  <td>float a;<br>float result = -a;</td>
+  <td>浮点否定。</td>
+</tr>
+<tr>
+  <td>neg-double</td>
+  <td>double a;<br>double result = -a;</td>
+  <td>浮点否定。</td>
+</tr>
+<tr>
+  <td>int-to-long</td>
+  <td>int32 a;<br>int64 result = (int64) a;</td>
+  <td>将 <code><span>int32</span></code> 符号扩展为 <code><span>int64</span></code>。</td>
+</tr>
+<tr>
+  <td>int-to-float</td>
+  <td>int32 a;<br>float result = (float) a;</td>
+  <td>使用最近舍入，将 <code><span>int32</span></code> 转换为 <code><span>float</span></code>。这会导致某些值不够精准。
+  </td>
+</tr>
+<tr>
+  <td>int-to-double</td>
+  <td>int32 a;<br>double result = (double) a;</td>
+  <td>将 <code><span>int32</span></code> 转换为 <code><span>double</span></code>。</td>
+</tr>
+<tr>
+  <td>long-to-int</td>
+  <td>int64 a;<br>int32 result = (int32) a;</td>
+  <td>将 <code><span>int64</span></code> 截断为 <code><span>int32</span></code>。</td>
+</tr>
+<tr>
+  <td>long-to-float</td>
+  <td>int64 a;<br>float result = (float) a;</td>
+  <td>使用最近舍入，将 <code><span>int64</span></code> 转换为 <code><span>float</span></code>。这会导致某些值不够精准。
+  </td>
+</tr>
+<tr>
+  <td>long-to-double</td>
+  <td>int64 a;<br>double result = (double) a;</td>
+  <td>使用最近舍入，将 <code><span>int64</span></code> 转换为 <code><span>double</span></code>。这会导致某些值不够精准。
+  </td>
+</tr>
+<tr>
+  <td>float-to-int</td>
+  <td>float a;<br>int32 result = (int32) a;</td>
+  <td>使用向零舍入，将 <code><span>float</span></code> 转换为 <code><span>int32</span></code>。<code><span>NaN</span></code> 和 <code><span>-0.<wbr>0</span></code>（负零）转换为整数 <code><span>0</span></code>。无穷数和因所占幅面过大而无法表示的值根据符号转换为 <code><span>0x7fffffff</span></code> 或 <code><span>-0x80000000</span></code>。
+  </td>
+</tr>
+<tr>
+  <td>float-to-long</td>
+  <td>float a;<br>int64 result = (int64) a;</td>
+  <td>使用向零舍入，将 <code><span>float</span></code> 转换为 <code><span>int64</span></code>。适用于 <code><span>float-to-int</span></code> 的特殊情况规则也适用于此，但超出范围的值除外，这些值根据符号转换为 <code><span>0x7fffffffffffffff</span></code> 或 <code><span>-0x8000000000000000</span></code>。
+  </td>
+</tr>
+<tr>
+  <td>float-to-double</td>
+  <td>float a;<br>double result = (double) a;</td>
+  <td>将 <code><span>float</span></code> 转换为 <code><span>double</span></code>，值依然精准。
+  </td>
+</tr>
+<tr>
+  <td>double-to-int</td>
+  <td>double a;<br>int32 result = (int32) a;</td>
+  <td>使用向零舍入，将 <code><span>double</span></code> 转换为 <code><span>int32</span></code>。适用于 <code><span>float-to-int</span></code> 的特殊情况规则也适用于此。
+  </td>
+</tr>
+<tr>
+  <td>double-to-long</td>
+  <td>double a;<br>int64 result = (int64) a;</td>
+  <td>使用向零舍入，将 <code><span>double</span></code> 转换为 <code><span>int64</span></code>。适用于 <code><span>float-to-long</span></code> 的特殊情况规则也适用于此。
+  </td>
+</tr>
+<tr>
+  <td>double-to-float</td>
+  <td>double a;<br>float result = (float) a;</td>
+  <td>使用最近舍入，将 <code><span>double</span></code> 转换为 <code><span>float</span></code>。这会导致某些值不够精准。
+  </td>
+</tr>
+<tr>
+  <td>int-to-byte</td>
+  <td>int32 a;<br>int32 result = (a &lt;&lt; 24) &gt;&gt; 24;</td>
+  <td>符号扩展结果，将 <code><span>int32</span></code> 截断为 <code><span>int8</span></code>。
+  </td>
+</tr>
+<tr>
+  <td>int-to-char</td>
+  <td>int32 a;<br>int32 result = a &amp; 0xffff;</td>
+  <td>无需符号扩展，将 <code><span>int32</span></code> 截断为 <code><span>uint16</span></code>。
+  </td>
+</tr>
+<tr>
+  <td>int-to-short</td>
+  <td>int32 a;<br>int32 result = (a &lt;&lt; 16) &gt;&gt; 16;</td>
+  <td>符号扩展结果，将 <code><span>int32</span></code> 截断为 <code><span>int16</span></code>。
+  </td>
+</tr>
+<tr>
+  <td>add-int</td>
+  <td>int32 a, b;<br>int32 result = a + b;</td>
+  <td>二进制补码加法。</td>
+</tr>
+<tr>
+  <td>sub-int</td>
+  <td>int32 a, b;<br>int32 result = a - b;</td>
+  <td>二进制补码减法。</td>
+</tr>
+<tr>
+  <td>rsub-int</td>
+  <td>int32 a, b;<br>int32 result = b - a;</td>
+  <td>二进制补码反向减法。</td>
+</tr>
+<tr>
+  <td>mul-int</td>
+  <td>int32 a, b;<br>int32 result = a * b;</td>
+  <td>二进制补码乘法。</td>
+</tr>
+<tr>
+  <td>div-int</td>
+  <td>int32 a, b;<br>int32 result = a / b;</td>
+  <td>二进制补码除法，向零舍入（即截断为整数）。如果 <code><span>b == 0</span></code>，则会抛出 <code><span>ArithmeticException</span></code>。
+  </td>
+</tr>
+<tr>
+  <td>rem-int</td>
+  <td>int32 a, b;<br>int32 result = a % b;</td>
+  <td>二进制补码除后取余数。结果的符号与 <code><span>a</span></code> 的符号相同，可更精确地定义为 <code><span>result == a - (a / b) * b</span></code>。如果 <code><span>b == 0</span></code>，则会抛出 <code><span>ArithmeticException</span></code>。
+  </td>
+</tr>
+<tr>
+  <td>and-int</td>
+  <td>int32 a, b;<br>int32 result = a &amp; b;</td>
+  <td>按位 AND。</td>
+</tr>
+<tr>
+  <td>or-int</td>
+  <td>int32 a, b;<br>int32 result = a | b;</td>
+  <td>按位 OR。</td>
+</tr>
+<tr>
+  <td>xor-int</td>
+  <td>int32 a, b;<br>int32 result = a ^ b;</td>
+  <td>按位 XOR。</td>
+</tr>
+<tr>
+  <td>shl-int</td>
+  <td>int32 a, b;<br>int32 result = a &lt;&lt; (b &amp; 0x1f);</td>
+  <td>按位左移（带掩码参数）。</td>
+</tr>
+<tr>
+  <td>shr-int</td>
+  <td>int32 a, b;<br>int32 result = a &gt;&gt; (b &amp; 0x1f);</td>
+  <td>按位有符号右移（带掩码参数）。</td>
+</tr>
+<tr>
+  <td>ushr-int</td>
+  <td>uint32 a, b;<br>int32 result = a &gt;&gt; (b &amp; 0x1f);</td>
+  <td>按位无符号右移（带掩码参数）。</td>
+</tr>
+<tr>
+  <td>add-long</td>
+  <td>int64 a, b;<br>int64 result = a + b;</td>
+  <td>二进制补码加法。</td>
+</tr>
+<tr>
+  <td>sub-long</td>
+  <td>int64 a, b;<br>int64 result = a - b;</td>
+  <td>二进制补码减法。</td>
+</tr>
+<tr>
+  <td>mul-long</td>
+  <td>int64 a, b;<br>int64 result = a * b;</td>
+  <td>二进制补码乘法。</td>
+</tr>
+<tr>
+  <td>div-long</td>
+  <td>int64 a, b;<br>int64 result = a / b;</td>
+  <td>二进制补码除法，向零舍入（即截断为整数）。如果 <code><span>b == 0</span></code>，则会抛出 <code><span>ArithmeticException</span></code>。
+  </td>
+</tr>
+<tr>
+  <td>rem-long</td>
+  <td>int64 a, b;<br>int64 result = a % b;</td>
+  <td>二进制补码除后取余数。结果的符号与 <code><span>a</span></code> 的符号相同，可更精确地定义为 <code><span>result == a - (a / b) * b</span></code>。如果 <code><span>b == 0</span></code>，则会抛出 <code><span>ArithmeticException</span></code>。
+  </td>
+</tr>
+<tr>
+  <td>and-long</td>
+  <td>int64 a, b;<br>int64 result = a &amp; b;</td>
+  <td>按位 AND。</td>
+</tr>
+<tr>
+  <td>or-long</td>
+  <td>int64 a, b;<br>int64 result = a | b;</td>
+  <td>按位 OR。</td>
+</tr>
+<tr>
+  <td>xor-long</td>
+  <td>int64 a, b;<br>int64 result = a ^ b;</td>
+  <td>按位 XOR。</td>
+</tr>
+<tr>
+  <td>shl-long</td>
+  <td>int64 a;<br>int32 b;<br>int64 result = a &lt;&lt; (b &amp; 0x3f);</td>
+  <td>按位左移（带掩码参数）。</td>
+</tr>
+<tr>
+  <td>shr-long</td>
+  <td>int64 a;<br>int32 b;<br>int64 result = a &gt;&gt; (b &amp; 0x3f);</td>
+  <td>按位有符号右移（带掩码参数）。</td>
+</tr>
+<tr>
+  <td>ushr-long</td>
+  <td>uint64 a;<br>int32 b;<br>int64 result = a &gt;&gt; (b &amp; 0x3f);</td>
+  <td>按位无符号右移（带掩码参数）。</td>
+</tr>
+<tr>
+  <td>add-float</td>
+  <td>float a, b;<br>float result = a + b;</td>
+  <td>浮点加法。</td>
+</tr>
+<tr>
+  <td>sub-float</td>
+  <td>float a, b;<br>float result = a - b;</td>
+  <td>浮点减法。</td>
+</tr>
+<tr>
+  <td>mul-float</td>
+  <td>float a, b;<br>float result = a * b;</td>
+  <td>浮点乘法。</td>
+</tr>
+<tr>
+  <td>div-float</td>
+  <td>float a, b;<br>float result = a / b;</td>
+  <td>浮点除法。</td>
+</tr>
+<tr>
+  <td>rem-float</td>
+  <td>float a, b;<br>float result = a % b;</td>
+  <td>浮点除后取余数。该函数不同于 IEEE 754 取余，定义为 <code><span>result == a - roundTowardZero(<wbr>a / b) * b</span></code>。
+  </td>
+</tr>
+<tr>
+  <td>add-double</td>
+  <td>double a, b;<br>double result = a + b;</td>
+  <td>浮点加法。</td>
+</tr>
+<tr>
+  <td>sub-double</td>
+  <td>double a, b;<br>double result = a - b;</td>
+  <td>浮点减法。</td>
+</tr>
+<tr>
+  <td>mul-double</td>
+  <td>double a, b;<br>double result = a * b;</td>
+  <td>浮点乘法。</td>
+</tr>
+<tr>
+  <td>div-double</td>
+  <td>double a, b;<br>double result = a / b;</td>
+  <td>浮点除法。</td>
+</tr>
+<tr>
+  <td>rem-double</td>
+  <td>double a, b;<br>double result = a % b;</td>
+  <td>浮点除后取余数。该函数不同于 IEEE 754 取余，定义为 <code><span>result == a - roundTowardZero(<wbr>a / b) * b</span></code>。
+  </td>
+</tr>
+</tbody>
+</table>
+
+<h2 id="其他"><a href="#其他" class="headerlink" title="其他"></a>其他</h2><table>
+<thead>
+<tr>
+<th>指令</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>monitor-enter vAA</td>
+<td>获取指定对象的监视锁</td>
+</tr>
+<tr>
+<td>monitor-exit  vAA</td>
+<td>释放指定对象的监视锁</td>
+</tr>
+<tr>
+<td>check-cast vAA, type@BBBB</td>
+<td>如果VA寄存器中的引用不能转型为type指定的类型，则抛出 ClassCastException</td>
+</tr>
+<tr>
+<td>instance-of vA, vB, type@CCCC</td>
+<td>如果VB是给定type类型的实例，则给VA赋值 1，否则赋值 0</td>
+</tr>
+<tr>
+<td>array-length vA, vB</td>
+<td>将指定数组的长度（条目个数）赋值给给定目标寄存器</td>
+</tr>
+<tr>
+<td>new-instance vAA, type@BBBB</td>
+<td>构造新type实例赋值给VA寄存器(类型必须引用非数组类)</td>
+</tr>
+<tr>
+<td>new-array vA, vB, type@CCCC</td>
+<td>根据指定的type类型和VB大小构造新数组VA(类型必须引用数组类)</td>
+</tr>
+<tr>
+<td>throw vAA</td>
+<td>抛出指定异常</td>
+</tr>
+<tr>
+<td>goto(/16,/32) +AA</td>
+<td>无条件跳转</td>
+</tr>
+</tbody></table>
+<h1 id="常用smali代码"><a href="#常用smali代码" class="headerlink" title="常用smali代码"></a>常用smali代码</h1><h2 id="Toast"><a href="#Toast" class="headerlink" title="Toast"></a>Toast</h2><figure class="highlight smali"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">.method</span><span class="keyword"> private</span> toast()V</span><br><span class="line"><span class="keyword">    .locals</span> 2</span><br><span class="line"><span class="keyword">    .prologue</span></span><br><span class="line"><span class="keyword">    .line</span> 40</span><br><span class="line">   <span class="built_in"> const-string </span>v0, <span class="string">"toast test..."</span></span><br><span class="line">   <span class="built_in"> const/4 </span>v1, 0x1</span><br><span class="line">   <span class="built_in"> invoke-static </span>&#123;p0, v0, v1&#125;, <span class="class">Landroid/widget/Toast;</span>-&gt;makeText(<span class="class">Landroid/content/Context;</span><span class="class">Ljava/lang/CharSequence;</span>I)<span class="class">Landroid/widget/Toast;</span></span><br><span class="line"> </span><br><span class="line">   <span class="built_in"> move-result-object </span>v0</span><br><span class="line"> </span><br><span class="line">   <span class="built_in"> invoke-virtual </span>&#123;v0&#125;, <span class="class">Landroid/widget/Toast;</span>-&gt;show()V</span><br><span class="line"> </span><br><span class="line"><span class="keyword">    .line</span> 41</span><br><span class="line">    return-void</span><br><span class="line"><span class="keyword">.end method</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="Log"><a href="#Log" class="headerlink" title="Log"></a>Log</h2><figure class="highlight smali"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">.method</span><span class="keyword"> private</span> log()V</span><br><span class="line"><span class="keyword">    .locals</span> 2</span><br><span class="line"><span class="keyword">    .prologue</span></span><br><span class="line"><span class="keyword">    .line</span> 36</span><br><span class="line">   <span class="built_in"> const-string </span>v0, <span class="string">"tag"</span></span><br><span class="line">   <span class="built_in"> const-string </span>v1, <span class="string">"Message"</span></span><br><span class="line">   <span class="built_in"> invoke-static </span>&#123;v0, v1&#125;, <span class="class">Landroid/util/Log;</span>-&gt;e(<span class="class">Ljava/lang/String;</span><span class="class">Ljava/lang/String;</span>)I</span><br><span class="line"> </span><br><span class="line"><span class="keyword">    .line</span> 37</span><br><span class="line">    return-void</span><br><span class="line"><span class="keyword">.end method</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="LogCallStack"><a href="#LogCallStack" class="headerlink" title="LogCallStack"></a>LogCallStack</h2><figure class="highlight smali"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">.method</span><span class="keyword"> private</span> logCallStack()V</span><br><span class="line"><span class="keyword">    .locals</span> 2</span><br><span class="line"><span class="keyword">    .prologue</span></span><br><span class="line"><span class="keyword">    .line</span> 44</span><br><span class="line">   <span class="built_in"> const-string </span>v0, <span class="string">"call stack:"</span></span><br><span class="line">   <span class="built_in"> new-instance </span>v1, <span class="class">Ljava/lang/Exception;</span></span><br><span class="line"> </span><br><span class="line">   <span class="built_in"> invoke-direct </span>&#123;v1&#125;, <span class="class">Ljava/lang/Exception;</span>-&gt;&lt;init&gt;()V</span><br><span class="line"> </span><br><span class="line">   <span class="built_in"> invoke-static </span>&#123;v1&#125;, <span class="class">Landroid/util/Log;</span>-&gt;getStackTraceString(<span class="class">Ljava/lang/Throwable;</span>)<span class="class">Ljava/lang/String;</span></span><br><span class="line"> </span><br><span class="line">   <span class="built_in"> move-result-object </span>v1</span><br><span class="line"> </span><br><span class="line">   <span class="built_in"> invoke-static </span>&#123;v0, v1&#125;, <span class="class">Landroid/util/Log;</span>-&gt;e(<span class="class">Ljava/lang/String;</span><span class="class">Ljava/lang/String;</span>)I</span><br><span class="line"> </span><br><span class="line"><span class="keyword">    .line</span> 45</span><br><span class="line">    return-void</span><br><span class="line"><span class="keyword">.end method</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="AlertDialog"><a href="#AlertDialog" class="headerlink" title="AlertDialog"></a>AlertDialog</h2><figure class="highlight smali"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">new-instance v1,<span class="class">Landroid/app/AlertDialog$Builder;</span></span><br><span class="line"></span><br><span class="line">invoke-direct &#123;v1,p0&#125;, <span class="class">Landroid/app/AlertDialog$Builder;</span>-&gt;&lt;init&gt;(<span class="class">Landroid/content/Context;</span>)V</span><br><span class="line"></span><br><span class="line"><span class="keyword">.line</span> 29</span><br><span class="line"><span class="keyword">.local</span> v1,builder:<span class="class">Landroid/app/AlertDialog$Builder;</span></span><br><span class="line">const-string v2,<span class="string">"Title"</span></span><br><span class="line"></span><br><span class="line">invoke-virtual &#123;v1,v2&#125;, <span class="class">Landroid/app/AlertDialog$Builder;</span>-&gt;setTitle(<span class="class">Ljava/lang/CharSequence;</span>)<span class="class">Landroid/app/AlertDialog$Builder;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">.line</span> 31</span><br><span class="line">const-string v2,<span class="string">"Message"</span></span><br><span class="line"></span><br><span class="line">invoke-virtual &#123;v1,v2&#125;,<span class="class">Landroid/app/AlertDialog$Builder;</span>-&gt;setMessage(<span class="class">Ljava/lang/CharSequence;</span>)<span class="class">Landroid/app/AlertDialog$Builder;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">.line</span> 52</span><br><span class="line">invoke-virtual &#123;v1&#125;,<span class="class">Landroid/app/AlertDialog$Builder;</span>-&gt;create()<span class="class">Landroid/app/AlertDialog;</span></span><br><span class="line"></span><br><span class="line">move-result-object v2</span><br><span class="line"></span><br><span class="line">invoke-virtual &#123;v2&#125;,<span class="class">Landroid/app/AlertDialog;</span>-&gt;show()V</span><br></pre></td></tr></table></figure>
+
+<h2 id="BroadcastReceiver"><a href="#BroadcastReceiver" class="headerlink" title="BroadcastReceiver"></a>BroadcastReceiver</h2><figure class="highlight smali"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">.</span><span class="comment"># static fields</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">.field</span><span class="keyword"> private</span> intentFilter:<span class="class">Landroid/content/IntentFilter;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">.field</span><span class="keyword"> private</span> reciver:<span class="class">Lcom/example/mytest/MyReciver;</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">method<span class="keyword"> protected</span> onCreate(<span class="class">Landroid/os/Bundle;</span>)V</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">  <span class="built_in"> new-instance </span>v0, <span class="class">Landroid/content/IntentFilter;</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">   <span class="built_in"> invoke-direct </span>&#123;v0&#125;, <span class="class">Landroid/content/IntentFilter;</span>-&gt;&lt;init&gt;()V</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">   <span class="built_in"> iput-object </span>v0, p0, <span class="class">Lcom/test/SearchActivity;</span>-&gt;intentFilter:<span class="class">Landroid/content/IntentFilter;</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">   <span class="built_in"> iget-object </span>v0, p0, <span class="class">Lcom/test/SearchActivity;</span>-&gt;intentFilter:<span class="class">Landroid/content/IntentFilter;</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">   <span class="built_in"> const-string </span>v1, <span class="string">"android.intent.action.search"</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">   <span class="built_in"> invoke-virtual </span>&#123;v0, v1&#125;, <span class="class">Landroid/content/IntentFilter;</span>-&gt;addAction(<span class="class">Ljava/lang/String;</span>)V</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">   <span class="built_in"> new-instance </span>v0, <span class="class">Lcom/example/mytest/MyReciver;</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">   <span class="built_in"> invoke-direct </span>&#123;v0, p0&#125;, <span class="class">Lcom/example/mytest/MyReciver;</span>-&gt;&lt;init&gt;(<span class="class">Landroid/app/Activity;</span>)V</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">   <span class="built_in"> iput-object </span>v0, p0,<span class="class">Lcom/test/SearchActivity;</span>-&gt;reciver:<span class="class">Lcom/example/mytest/MyReciver;</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">   <span class="built_in"> iget-object </span>v0, p0, <span class="class">Lcom/test/SearchActivity;</span>-&gt;reciver:<span class="class">Lcom/example/mytest/MyReciver;</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">   <span class="built_in"> iget-object </span>v1, p0, <span class="class">Lcom/test/SearchActivity;</span>-&gt;intentFilter:<span class="class">Landroid/content/IntentFilter;</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">   <span class="built_in"> invoke-virtual </span>&#123;p0, v0, v1&#125;, <span class="class">Lcom/test/SearchActivity;</span>-&gt;registerReceiver(<span class="class">Landroid/content/BroadcastReceiver;</span><span class="class">Landroid/content/IntentFilter;</span>)<span class="class">Landroid/content/Intent;</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">.</span>.method<span class="keyword"> public</span> onDestroy()V</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">iget-object v0, p0, <span class="class">Lcom/test/SearchActivity;</span>-&gt;reciver:<span class="class">Lcom/example/mytest/MyReciver;</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">invoke-virtual &#123;p0, v0&#125;, <span class="class">Lcom/test/SearchActivity;</span>-&gt;unregisterReceiver(<span class="class">Landroid/content/BroadcastReceiver;</span>)V</span><br></pre></td></tr></table></figure>
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          
+        
+        <div class="post-tags">
+            <a href="/tags/re/" rel="tag"># re</a>
+          
+            <a href="/tags/Android/" rel="tag"># Android</a>
+          
+        </div>
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+              <a href="/2019/07/26/抽象类和接口的区别/" rel="next" title="抽象类和接口的区别">
+                <i class="fa fa-chevron-left"></i> 抽象类和接口的区别
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+              <a href="/2019/07/28/2019暑假任务———CTF-GAME/" rel="prev" title="2019暑假任务———CTF_GAME">
+                2019暑假任务———CTF_GAME <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+  </div>
+
+
+          </div>
+          
+    
+    <div class="comments" id="gitalk-container"></div>
+  
+
+
+        </div>
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image"
+      src="/images/headicon.png"
+      alt="0xE4s0n">
+  <p class="site-author-name" itemprop="name">0xE4s0n</p>
+  <div class="site-description motion-element" itemprop="description"></div>
+</div>
+  <nav class="site-state motion-element">
+      <div class="site-state-item site-state-posts">
+        
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">9</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+    
+      
+      
+      <div class="site-state-item site-state-categories">
+        
+          
+            <a href="/categories/">
+          
+        
+        
+        
+          
+        
+          
+        
+          
+        
+          
+        
+        <span class="site-state-item-count">4</span>
+        <span class="site-state-item-name">分类</span>
+        </a>
+      </div>
+    
+      
+      
+      <div class="site-state-item site-state-tags">
+        
+          
+            <a href="/tags/">
+          
+        
+        
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+        <span class="site-state-item-count">5</span>
+        <span class="site-state-item-name">标签</span>
+        </a>
+      </div>
+    
+  </nav>
+
+
+  <div class="links-of-blogroll motion-element links-of-blogroll-block">
+    <div class="links-of-blogroll-title">
+      <i class="fa  fa-fw fa-link"></i>
+      友链
+    </div>
+    <ul class="links-of-blogroll-list">
+        <li class="links-of-blogroll-item">
+          <a href="https://syc-2019--fxxy.repl.co" title="https://syc-2019--fxxy.repl.co" rel="noopener" target="_blank">Syclover</a>
+        </li>
+      
+        <li class="links-of-blogroll-item">
+          <a href="https://www.0xpoker.cn/" title="https://www.0xpoker.cn/" rel="noopener" target="_blank">0xpoker</a>
+        </li>
+      
+        <li class="links-of-blogroll-item">
+          <a href="https://fingerprint.bitcron.com/" title="https://fingerprint.bitcron.com/" rel="noopener" target="_blank">0x指纹</a>
+        </li>
+      
+        <li class="links-of-blogroll-item">
+          <a href="http://www.reversing.win/" title="http://www.reversing.win/" rel="noopener" target="_blank">0x7o8v</a>
+        </li>
+      
+        <li class="links-of-blogroll-item">
+          <a href="https://zoniony.github.io/" title="https://zoniony.github.io/" rel="noopener" target="_blank">zoniony</a>
+        </li>
+      
+        <li class="links-of-blogroll-item">
+          <a href="https://abcdefghijklmnopqrst.xyz/" title="https://abcdefghijklmnopqrst.xyz/" rel="noopener" target="_blank">骑麦兜看日落</a>
+        </li>
+      
+    </ul>
+  </div>
+
+        </div>
+      </div>
+      <!--noindex-->
+        <div class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+            
+            
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Smali背景"><span class="nav-number">1.</span> <span class="nav-text">Smali背景</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#简单介绍"><span class="nav-number">2.</span> <span class="nav-text">简单介绍</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#基本类型-原始类型"><span class="nav-number">3.</span> <span class="nav-text">基本类型(原始类型)</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#引用类型"><span class="nav-number">4.</span> <span class="nav-text">引用类型</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#对象类型"><span class="nav-number">4.1.</span> <span class="nav-text">对象类型</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#数组类型"><span class="nav-number">4.2.</span> <span class="nav-text">数组类型</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#方法声明及调用"><span class="nav-number">5.</span> <span class="nav-text">方法声明及调用</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#寄存器"><span class="nav-number">6.</span> <span class="nav-text">寄存器</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#寄存器声明及使用"><span class="nav-number">6.1.</span> <span class="nav-text">寄存器声明及使用</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#确定寄存器的个数"><span class="nav-number">6.2.</span> <span class="nav-text">确定寄存器的个数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#寄存器的命名方式"><span class="nav-number">6.3.</span> <span class="nav-text">寄存器的命名方式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#寄存器的命名"><span class="nav-number">6.4.</span> <span class="nav-text">寄存器的命名</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Dalvik指令集"><span class="nav-number">7.</span> <span class="nav-text">Dalvik指令集</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#移位"><span class="nav-number">7.1.</span> <span class="nav-text">移位</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#返回"><span class="nav-number">7.2.</span> <span class="nav-text">返回</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#常量"><span class="nav-number">7.3.</span> <span class="nav-text">常量</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#判断"><span class="nav-number">7.4.</span> <span class="nav-text">判断</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#属性"><span class="nav-number">7.5.</span> <span class="nav-text">属性</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#调用"><span class="nav-number">7.6.</span> <span class="nav-text">调用</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#数学运算"><span class="nav-number">7.7.</span> <span class="nav-text">数学运算</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#其他"><span class="nav-number">7.8.</span> <span class="nav-text">其他</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#常用smali代码"><span class="nav-number">8.</span> <span class="nav-text">常用smali代码</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Toast"><span class="nav-number">8.1.</span> <span class="nav-text">Toast</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Log"><span class="nav-number">8.2.</span> <span class="nav-text">Log</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#LogCallStack"><span class="nav-number">8.3.</span> <span class="nav-text">LogCallStack</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#AlertDialog"><span class="nav-number">8.4.</span> <span class="nav-text">AlertDialog</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#BroadcastReceiver"><span class="nav-number">8.5.</span> <span class="nav-text">BroadcastReceiver</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </div>
+      <!--/noindex-->
+      
+        <div class="back-to-top motion-element">
+          <i class="fa fa-arrow-up"></i>
+          
+            <span id="scrollpercent"><span>0</span>%</span>
+          
+        </div>
+      
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">0xE4s0n</span>
+</div>
+
+<div id="days"></div>
+<script>
+function show_date_time(){
+    window.setTimeout("show_date_time()", 1000);
+    BirthDay=new Date("06/17/2019 15:13:14");//修改为自己的blog建站时间
+    today=new Date();
+    timeold=(today.getTime()-BirthDay.getTime());
+    sectimeold=timeold/1000
+    secondsold=Math.floor(sectimeold);
+    msPerDay=24*60*60*1000
+    e_daysold=timeold/msPerDay
+    daysold=Math.floor(e_daysold);
+    e_hrsold=(e_daysold-daysold)*24;
+    hrsold=setzero(Math.floor(e_hrsold));
+    e_minsold=(e_hrsold-hrsold)*60;
+    minsold=setzero(Math.floor((e_hrsold-hrsold)*60));
+    seconds=setzero(Math.floor((e_minsold-minsold)*60));
+    document.getElementById('days').innerHTML="已运行"+daysold+"天"+hrsold+"小时"+minsold+"分"+seconds+"秒";
+}
+function setzero(i){
+    if (i<10)
+    {i="0" + i};
+    return i;
+}
+show_date_time();
+</script>
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-user"></i>
+    </span>
+    <span class="site-uv" title="总访客量">
+      访客：<span class="busuanzi-value" id="busuanzi_value_site_uv"></span>
+    </span>
+  
+    <span class="post-meta-divider">|</span>
+  
+    <span class="post-meta-item-icon">
+      <i class="fa fa-eye"></i>
+    </span>
+    <span class="site-pv" title="总访问量">
+      浏览次数：<span class="busuanzi-value" id="busuanzi_value_site_pv"></span>
+    </span>
+  
+</div>
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+
+  </div>
+
+  
+    
+    
+  
+    
+    
+      
+    
+  
+  <script color='0,0,255' opacity='0.5' zIndex='-1' count='99' src="//cdn.bootcss.com/canvas-nest.js/1.0.1/canvas-nest.min.js"></script>
+  <script src="//cdn.jsdelivr.net/jquery/2.1.3/jquery.min.js"></script>
+  <script src="//cdn.jsdelivr.net/fancybox/2.1.5/jquery.fancybox.pack.js"></script>
+  <script defer src="/lib/three/three.min.js"></script>
+  <script defer src="/lib/three/canvas_sphere.min.js"></script>
+
+  <script src="/js/utils.js?v=7.2.0"></script>
+
+  
+  <script src="/js/affix.js?v=7.2.0"></script>
+  <script src="/js/schemes/pisces.js?v=7.2.0"></script>
+
+
+  
+  <script src="/js/scrollspy.js?v=7.2.0"></script>
+<script src="/js/post-details.js?v=7.2.0"></script>
+
+
+
+  <script src="/js/next-boot.js?v=7.2.0"></script>
+
+  
+
+  
+
+  
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    
+<script src="//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js"></script>
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.css">
+<script src="//cdn.jsdelivr.net/npm/js-md5@0.7.3/src/md5.min.js"></script>
+
+<script>
+  var gitalk = new Gitalk({
+    clientID: '20a66d45deddc86a7b8f',
+    clientSecret: 'e7f74883281913b8ce00b761fcd7b79f844e4d4d',
+    repo: '0xE4s0n.github.io',
+    owner: '0xE4s0n',
+    admin: ['0xE4s0n'],
+    id: md5(location.pathname),
+      language: 'zh-CN',
+    
+    distractionFreeMode: 'true'
+  });
+  gitalk.render('gitalk-container');
+</script>
+
+<script src="/live2d-widget/autoload.js"></script>
+</body>
+</html>

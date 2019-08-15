@@ -1,0 +1,760 @@
+<!DOCTYPE html>
+
+
+
+
+
+<html class="theme-next pisces" lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="generator" content="Hexo 3.9.0">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="google-site-verification" content="5kQ1pLcJBOrSXQ4-tRz_R_V6TfGCs1Jls9WuWt6-l6w">
+  <meta name="sogou_site_verification" content="nOkR7Wa5yE">
+  <meta name="360-site-verification" content="998ba408010b57a9856982d547a1cf5c">
+  <meta name="baidu-site-verification" content="pO45hC5Gb2">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/headicon.png?v=7.2.0">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/headicon.png?v=7.2.0">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/headicon.png?v=7.2.0">
+  <link rel="mask-icon" href="/images/headicon.svg?v=7.2.0" color="#222">
+
+<link rel="stylesheet" href="/css/main.css?v=7.2.0">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css?v=4.7.0">
+    
+  
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/fancybox/2.1.5/jquery.fancybox.min.css">
+
+
+<script id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '7.2.0',
+    sidebar: {"position":"left","display":"post","offset":12,"onmobile":false},
+    back2top: {"enable":true,"sidebar":true,"scrollpercent":true},
+    copycode: {"enable":true,"show_result":true,"style":"mac"},
+    fancybox: true,
+    mediumzoom: false,
+    lazyload: false,
+    pangu: false,
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    },
+    localsearch: {"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
+    search: {
+      root: '/',
+      path: ''
+    },
+    tabs: true,
+    motion: {"enable":false,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    translation: {
+      copy_button: '复制',
+      copy_success: '复制成功',
+      copy_failure: '复制失败'
+    }
+  };
+</script>
+
+  <meta name="description" content="fork入门知识&amp;emsp;&amp;emsp;一个进程，包括代码、数据和分配给进程的资源。fork()函数通过系统调用创建一个与原来进程几乎完全相同的进程，也就是两个进程可以做完全相同的事，但如果初始参数或者传入的变量不同，两个进程也可以做不同的事。　　一个进程调用fork()函数后，系统先给新的进程分配资源，例如存储数据和代码的空间。然后把原来的进程的所有值都复制到新的新进程中，只有少数值与原来的进程">
+<meta name="keywords" content="C">
+<meta property="og:type" content="article">
+<meta property="og:title" content="fork函数">
+<meta property="og:url" content="http://yoursite.com/2019/08/13/fork函数/index.html">
+<meta property="og:site_name" content="0xE4s0n的博客">
+<meta property="og:description" content="fork入门知识&amp;emsp;&amp;emsp;一个进程，包括代码、数据和分配给进程的资源。fork()函数通过系统调用创建一个与原来进程几乎完全相同的进程，也就是两个进程可以做完全相同的事，但如果初始参数或者传入的变量不同，两个进程也可以做不同的事。　　一个进程调用fork()函数后，系统先给新的进程分配资源，例如存储数据和代码的空间。然后把原来的进程的所有值都复制到新的新进程中，只有少数值与原来的进程">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https://i.loli.net/2019/08/13/MOwEAkYB2eRKpGS.png">
+<meta property="og:image" content="https://i.loli.net/2019/08/13/8aSYhQzV9GgqnxC.png">
+<meta property="og:updated_time" content="2019-08-14T15:08:16.417Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="fork函数">
+<meta name="twitter:description" content="fork入门知识&amp;emsp;&amp;emsp;一个进程，包括代码、数据和分配给进程的资源。fork()函数通过系统调用创建一个与原来进程几乎完全相同的进程，也就是两个进程可以做完全相同的事，但如果初始参数或者传入的变量不同，两个进程也可以做不同的事。　　一个进程调用fork()函数后，系统先给新的进程分配资源，例如存储数据和代码的空间。然后把原来的进程的所有值都复制到新的新进程中，只有少数值与原来的进程">
+<meta name="twitter:image" content="https://i.loli.net/2019/08/13/MOwEAkYB2eRKpGS.png">
+  <link rel="canonical" href="http://yoursite.com/2019/08/13/fork函数/">
+
+
+<script id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>fork函数 | 0xE4s0n的博客</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .motion-element,
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-title { opacity: initial; }
+
+  .use-motion .logo,
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta">
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">0xE4s0n的博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+    <ul id="menu" class="menu">
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+      
+    
+      
+    
+
+    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br/>首页</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-about">
+      
+    
+      
+    
+
+    <a href="/about/" rel="section"><i class="menu-item-icon fa fa-fw fa-user"></i> <br/>关于</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+      
+    
+      
+    
+
+    <a href="/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i> <br/>标签<span class="badge">5</span></a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+      
+    
+      
+    
+
+    <a href="/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i> <br/>分类<span class="badge">4</span></a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+      
+    
+      
+    
+
+    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br/>归档<span class="badge">9</span></a>
+
+  </li>
+    </ul>
+</nav>
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+            
+
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/08/13/fork函数/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="0xE4s0n">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/headicon.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="0xE4s0n的博客">
+    </span>
+      <header class="post-header">
+
+        
+          <h1 class="post-title" itemprop="name headline">fork函数
+
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2019-08-13 15:47:59" itemprop="dateCreated datePublished" datetime="2019-08-13T15:47:59+08:00">2019-08-13</time>
+            </span>
+          
+            
+
+            
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2019-08-14 23:08:16" itemprop="dateModified" datetime="2019-08-14T23:08:16+08:00">2019-08-14</time>
+              </span>
+            
+          
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/linux/" itemprop="url" rel="index"><span itemprop="name">linux</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon"
+              >
+                <i class="fa fa-eye"></i>
+                 阅读次数： 
+                <span class="busuanzi-value" id="busuanzi_value_page_pv"></span>
+              </span>
+            </span>
+          <br/>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h1 id="fork入门知识"><a href="#fork入门知识" class="headerlink" title="fork入门知识"></a>fork入门知识</h1><p>&emsp;&emsp;一个进程，包括代码、数据和分配给进程的资源。<code>fork()</code>函数通过系统调用创建一个与原来进程几乎完全相同的进程，也就是两个进程可以做完全相同的事，但如果初始参数或者传入的变量不同，两个进程也可以做不同的事。<br>　　一个进程调用<code>fork()</code>函数后，系统先给新的进程分配资源，例如存储数据和代码的空间。然后把原来的进程的所有值都复制到新的新进程中，只有少数值与原来的进程的值不同。相当于克隆了一个自己。  </p>
+<p>例子：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;unistd.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span> <span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">pid_t</span> fpid; <span class="comment">//fpid表示fork函数返回的值</span></span><br><span class="line">    <span class="keyword">int</span> count=<span class="number">0</span>;</span><br><span class="line">    fpid=fork();</span><br><span class="line">    <span class="keyword">if</span> (fpid &lt; <span class="number">0</span>)</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">"error in fork!"</span>);</span><br><span class="line">    <span class="keyword">else</span> <span class="keyword">if</span> (fpid == <span class="number">0</span>) &#123;</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">"i am the child process, my process id is%d/n"</span>,getpid());</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">"我是爹的儿子/n"</span>);<span class="comment">//对某些人来说中文看着更直白。</span></span><br><span class="line">        count++;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">else</span> &#123;</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">"i am the parent process, my process id is%d/n"</span>,getpid());</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">"我是孩子他爹/n"</span>);</span><br><span class="line">        count++;</span><br><span class="line">    &#125;  </span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">"统计结果是: %d/n"</span>,count);</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>运行结果</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">i am the child process, my process id is 5574</span><br><span class="line">我是爹的儿子</span><br><span class="line">统计结果是: 1</span><br><span class="line">i am the parent process, my process id is 5573</span><br><span class="line">我是孩子他爹</span><br><span class="line">统计结果是: 1</span><br></pre></td></tr></table></figure>
+
+<p>&emsp;&emsp;在语句<code>fpid=fork()</code>之前，只有一个进程在执行这段代码，但在这条语句之后，就变成两个进程在执行了，这两个进程的几乎完全相同，将要执行的下一条语句都是<code>if(fpid&lt;0)</code>……<br>　　为什么两个进程的<code>fpid</code>不同呢，这与<code>fork</code>函数的特性有关。<code>fork</code>调用的一个奇妙之处就是它仅仅被调用一次，却能够返回两次，它可能有三种不同的返回值：</p>
+<ul>
+<li>在父进程中，<code>fork</code>返回新创建子进程的进程<code>ID</code>；</li>
+<li>在子进程中，<code>fork</code>返回<code>0</code>；</li>
+<li>如果出现错误，<code>fork</code>返回一个负值；  </li>
+</ul>
+<p>&emsp;&emsp;在<code>fork</code>函数执行完毕后，如果创建新进程成功，则出现两个进程，一个是子进程，一个是父进程。在子进程中，<code>fork</code>函数返回<code>0</code>，在父进程中，<code>fork</code>返回新创建子进程的进程<code>ID</code>。我们可以通过<code>fork</code>返回的值来判断当前进程是子进程还是父进程。<br><strong>fork出错可能有两种原因：</strong></p>
+<ul>
+<li>当前的进程数已经达到了系统规定的上限，这时<code>errno</code>的值被设置为<code>EAGAIN</code>。</li>
+<li>系统内存不足，这时<code>errno</code>的值被设置为<code>ENOMEM</code>。</li>
+</ul>
+<p>&emsp;&emsp;创建新进程成功后，系统中出现两个基本完全相同的进程，这两个进程执行没有固定的先后顺序，哪个进程先执行要看系统的进程调度策略。每个进程都有一个独特（互不相同）的进程标识符（<code>process ID</code>），可以通过<code>getpid()</code>函数获得，还有一个记录父进程pid的变量，可以通过<code>getppid()</code>函数获得变量的值。<br>fork执行完毕后，出现两个进程<br><img src="https://i.loli.net/2019/08/13/MOwEAkYB2eRKpGS.png" alt><br>　　有人可能疑惑为什么不是从<code>#include</code>处开始复制代码的，这是因为<code>fork</code>是把进程当前的情况拷贝一份，执行<code>fork</code>时，进程已经执行完了<code>int count=0;</code> <code>fork</code>只拷贝下一个要执行的代码到新的进程。</p>
+<h1 id="fork进阶知识"><a href="#fork进阶知识" class="headerlink" title="fork进阶知识"></a>fork进阶知识</h1><p>先看一份代码：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;unistd.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">void</span>)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">   <span class="keyword">int</span> i=<span class="number">0</span>;</span><br><span class="line">   <span class="built_in">printf</span>(<span class="string">"i son/pa ppid pid  fpid/n"</span>);</span><br><span class="line">   <span class="comment">//ppid指当前进程的父进程pid</span></span><br><span class="line">   <span class="comment">//pid指当前进程的pid,</span></span><br><span class="line">   <span class="comment">//fpid指fork返回给当前进程的值</span></span><br><span class="line">   <span class="keyword">for</span>(i=<span class="number">0</span>;i&lt;<span class="number">2</span>;i++)&#123;</span><br><span class="line">       <span class="keyword">pid_t</span> fpid=fork();</span><br><span class="line">       <span class="keyword">if</span>(fpid==<span class="number">0</span>)</span><br><span class="line">    	   <span class="built_in">printf</span>(<span class="string">"%d child  %4d %4d %4d/n"</span>,i,getppid(),getpid(),fpid);</span><br><span class="line">       <span class="keyword">else</span></span><br><span class="line">    	   <span class="built_in">printf</span>(<span class="string">"%d parent %4d %4d %4d/n"</span>,i,getppid(),getpid(),fpid);</span><br><span class="line">   &#125;</span><br><span class="line">   <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>结果</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">i son/pa ppid pid  fpid</span><br><span class="line">0 parent 2043 3224 3225</span><br><span class="line">0 child  3224 3225    0</span><br><span class="line">1 parent 2043 3224 3226</span><br><span class="line">1 parent 3224 3225 3227</span><br><span class="line">1 child     1 3227    0</span><br><span class="line">1 child     1 3226    0</span><br></pre></td></tr></table></figure>
+
+<p>&emsp;&emsp;第一步：在父进程中，指令执行到<code>for</code>循环中，<code>i=0</code>，接着执行<code>fork</code>，<code>fork</code>执行完后，系统中出现两个进程，分别是<code>p3224</code>和<code>p3225</code>（后面我都用<code>pxxxx</code>表示进程<code>id</code>为<code>xxxx</code>的进程）。可以看到父进程<code>p3224</code>的父进程是<code>p2043</code>，子进程<code>p3225</code>的父进程正好是<code>p3224</code>。我们用一个链表来表示这个关系：<code>p2043-&gt;p3224-&gt;p3225</code><br>　　第二步：假设父进程<code>p3224</code>先执行，当进入下一个循环时，<code>i=1</code>，接着执行<code>fork</code>，系统中又新增一个进程<code>p3226</code>，对于此时的父进程，p2043-&gt;p3224（当前进程）-&gt;p3226（被创建的子进程）。对于子进程<code>p3225</code>，执行完第一次循环后，<code>i=1</code>，接着执行<code>fork</code>，系统中新增一个进程<code>p3227</code>，对于此进程，p3224-&gt;p3225（当前进程）-&gt;p3227（被创建的子进程）。从输出可以看到<code>p3225</code>原来是<code>p3224</code>的子进程，现在变成<code>p3227</code>的父进程。父子是相对的，这个应该容易理解。只要当前进程执行了<code>fork</code>，该进程就变成了父进程了，就打印出了<code>parent</code>。<br>　　 第三步：第二步创建了两个进程<code>p3226</code>，<code>p3227</code>，这两个进程执行完<code>printf</code>函数后就结束了，因为这两个进程无法进入第三次循环，无法<code>fork</code>，该执行<code>return 0;</code>了，其他进程也是如此。  </p>
+<p>&emsp;&emsp;细心的读者可能注意到<code>p3226</code>，<code>p3227</code>的父进程难道不该是<code>p3224</code>和<code>p3225</code>吗，怎么会是<code>1</code>呢？这里得讲到进程的创建和死亡的过程，在<code>p3224</code>和<code>p3225</code>执行完第二个循环后，<code>main</code>函数就该退出了，也即进程该死亡了，因为它已经做完所有事情了。<code>p3224</code>和<code>p3225</code>死亡后，<code>p3226</code>，<code>p3227</code>就没有父进程了，这在操作系统是不被允许的，所以<code>p3226</code>，<code>p322</code>7的父进程就被置为<code>p1</code>了，<code>p1</code>是永远不会死亡的</p>
+<p>这个程序执行的流程如下：<br><img src="https://i.loli.net/2019/08/13/8aSYhQzV9GgqnxC.png" alt><br>　　总结一下规律，对于这种N次循环的情况，执行printf函数的次数为2*(1+2+4+……+2<sup>N-1</sup>)次，创建的子进程数为1+2+4+……+2<sup>N-1个。<br>　　 同时，如果想测一下一个程序中到底创建了几个子进程，最好的方法就是调用<code>printf</code>函数打印该进程的<code>pid</code>，也即调用<code>printf(&quot;%d/n&quot;,getpid());</code>或者通过<code>printf(&quot;+/n&quot;);</code>来判断产生了几个进程。有人想通过调用<code>printf(&quot;+&quot;);</code>来统计创建了几个进程，这是不妥当的。<br>    看下面的代码：</sup></p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;unistd.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</span><br><span class="line">	<span class="keyword">pid_t</span> fpid;<span class="comment">//fpid表示fork函数返回的值</span></span><br><span class="line">	<span class="comment">//printf("fork!");</span></span><br><span class="line">	<span class="built_in">printf</span>(<span class="string">"fork!/n"</span>);</span><br><span class="line">	fpid = fork();</span><br><span class="line">	<span class="keyword">if</span> (fpid &lt; <span class="number">0</span>)</span><br><span class="line">		<span class="built_in">printf</span>(<span class="string">"error in fork!"</span>);</span><br><span class="line">	<span class="keyword">else</span> <span class="keyword">if</span> (fpid == <span class="number">0</span>)</span><br><span class="line">		<span class="built_in">printf</span>(<span class="string">"I am the child process, my process id is %d/n"</span>, getpid());</span><br><span class="line">	<span class="keyword">else</span></span><br><span class="line">		<span class="built_in">printf</span>(<span class="string">"I am the parent process, my process id is %d/n"</span>, getpid());</span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>结果</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">fork!</span><br><span class="line">I am the parent process, my process id is 3361</span><br><span class="line">I am the child process, my process id is 3362</span><br></pre></td></tr></table></figure>
+
+<p>如果把语句<code>printf(&quot;fork!/n&quot;);</code>注释掉，执行<code>printf(&quot;fork!&quot;);</code><br>则新的程序的执行结果是：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">fork!I am the parent process, my process id is 3298</span><br><span class="line">fork!I am the child process, my process id is 3299</span><br></pre></td></tr></table></figure>
+
+<p>&emsp;&emsp;程序的唯一的区别就在于一个<code>/n</code>回车符号，为什么结果会相差这么大呢？<br>　　这就跟<code>printf</code>的缓冲机制有关了，<code>printf</code>某些内容时，操作系统仅仅是把该内容放到了<code>stdout</code>的缓冲队列里了,并没有实际的写到屏幕上。但是,只要看到有<code>/n</code> 则会立即刷新<code>stdout</code>,因此就马上能够打印了。<br>　　运行了<code>printf(&quot;fork!&quot;)</code>后,<code>“fork!”</code>仅仅被放到了缓冲里,程序运行到<code>fork</code>时缓冲里面的<code>“fork!”</code> 被子进程复制过去了。因此在子进程度stdout缓冲里面就也有了<code>fork!</code> 。所以,你最终看到的会是<code>fork!</code> 被<code>printf</code>了2次！！！！<br>　　而运行<code>printf(&quot;fork! /n&quot;)</code>后,<code>“fork!”</code>被立即打印到了屏幕上,之后<code>fork</code>到的子进程里的<code>stdout</code>缓冲里不会有<code>fork!</code> 内容。因此你看到的结果会是<code>fork!</code> 被<code>printf</code>了1次！！！！<br>　　所以说<code>printf(&quot;+&quot;);</code>不能正确地反应进程的数量。
+　　</p>
+<h1 id="fork高阶知识"><a href="#fork高阶知识" class="headerlink" title="fork高阶知识"></a>fork高阶知识</h1><h2 id="fork-父子进程变量的关系"><a href="#fork-父子进程变量的关系" class="headerlink" title="fork()父子进程变量的关系"></a>fork()父子进程变量的关系</h2><p>调用<code>fork</code>，会有两次返回，一次是父进程、一次是子进程，因为子进程是父进程的副本，所以它拥有父进程数据空间、栈和堆的副本，但是它们并没有共享这些存储空间，它们只共享正文段。 我们通过下面的程序验证下。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;unistd.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="keyword">int</span> global = <span class="number">6</span>;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">int</span> argc,<span class="keyword">char</span>** argv)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> var=<span class="number">10</span>;  </span><br><span class="line">    <span class="keyword">int</span> pid=fork();</span><br><span class="line">    <span class="keyword">if</span>(pid==<span class="number">-1</span>)&#123;</span><br><span class="line">          <span class="built_in">printf</span>(<span class="string">"error!"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">else</span> <span class="keyword">if</span>(pid==<span class="number">0</span>)&#123;</span><br><span class="line">        global++;</span><br><span class="line">        var++;</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">"This is the child process!/n"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">else</span>&#123;</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">"This is the parent process! child processid=%d/n"</span>,pid);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">"%d, %d, %d /n"</span>, getpid(), global, var);</span><br><span class="line">    <span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>输出</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">This is the child process!</span><br><span class="line">20415, 7, 11 </span><br><span class="line">This is the parent process! child processid=20415</span><br><span class="line">20414, 6, 10</span><br></pre></td></tr></table></figure>
+
+<p>可以看出，子进程的值发生了改变，可以说明，它们并不是共享的。<br>把变量的地址打印出来</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">This is the child process!</span><br><span class="line">20505, 7, 11, 646334744 </span><br><span class="line">This is the parent process! child processid=20505</span><br><span class="line">20504, 6, 10, 646334744</span><br></pre></td></tr></table></figure>
+
+<p>&emsp;&emsp;地址居然是一样的，内容还是不一样，原来这里打印的变量的地址都是逻辑空间，对于父子进程，它们的逻辑空间一样，但是物理空间还是不同的。所以在多进程编程中，不要寄希望于通过地址来判断两个变量是否相同。<br>　　<code>fork</code>之后，子进程会拷贝父进程的数据空间、堆和栈空间（实际上是采用写时复制技术），二者共享代码段。<br>所以在子进程中修改全局变量（局部变量，分配在堆上的内存同样也是）后，父进程的相同的全局变量不会改变。</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          
+        
+        <div class="post-tags">
+            <a href="/tags/C/" rel="tag"># C</a>
+          
+        </div>
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+              <a href="/2019/08/13/De1ctf——Signal vm + Signal vm Δ/" rel="next" title="De1ctf——Signal vm + Signal vm Δ">
+                <i class="fa fa-chevron-left"></i> De1ctf——Signal vm + Signal vm Δ
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+              <a href="/2019/08/14/ptrace函数/" rel="prev" title="ptrace函数">
+                ptrace函数 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+  </div>
+
+
+          </div>
+          
+    
+    <div class="comments" id="gitalk-container"></div>
+  
+
+
+        </div>
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image"
+      src="/images/headicon.png"
+      alt="0xE4s0n">
+  <p class="site-author-name" itemprop="name">0xE4s0n</p>
+  <div class="site-description motion-element" itemprop="description"></div>
+</div>
+  <nav class="site-state motion-element">
+      <div class="site-state-item site-state-posts">
+        
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">9</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+    
+      
+      
+      <div class="site-state-item site-state-categories">
+        
+          
+            <a href="/categories/">
+          
+        
+        
+        
+          
+        
+          
+        
+          
+        
+          
+        
+        <span class="site-state-item-count">4</span>
+        <span class="site-state-item-name">分类</span>
+        </a>
+      </div>
+    
+      
+      
+      <div class="site-state-item site-state-tags">
+        
+          
+            <a href="/tags/">
+          
+        
+        
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+        <span class="site-state-item-count">5</span>
+        <span class="site-state-item-name">标签</span>
+        </a>
+      </div>
+    
+  </nav>
+
+
+  <div class="links-of-blogroll motion-element links-of-blogroll-block">
+    <div class="links-of-blogroll-title">
+      <i class="fa  fa-fw fa-link"></i>
+      友链
+    </div>
+    <ul class="links-of-blogroll-list">
+        <li class="links-of-blogroll-item">
+          <a href="https://syc-2019--fxxy.repl.co" title="https://syc-2019--fxxy.repl.co" rel="noopener" target="_blank">Syclover</a>
+        </li>
+      
+        <li class="links-of-blogroll-item">
+          <a href="https://www.0xpoker.cn/" title="https://www.0xpoker.cn/" rel="noopener" target="_blank">0xpoker</a>
+        </li>
+      
+        <li class="links-of-blogroll-item">
+          <a href="https://fingerprint.bitcron.com/" title="https://fingerprint.bitcron.com/" rel="noopener" target="_blank">0x指纹</a>
+        </li>
+      
+        <li class="links-of-blogroll-item">
+          <a href="http://www.reversing.win/" title="http://www.reversing.win/" rel="noopener" target="_blank">0x7o8v</a>
+        </li>
+      
+        <li class="links-of-blogroll-item">
+          <a href="https://zoniony.github.io/" title="https://zoniony.github.io/" rel="noopener" target="_blank">zoniony</a>
+        </li>
+      
+        <li class="links-of-blogroll-item">
+          <a href="https://abcdefghijklmnopqrst.xyz/" title="https://abcdefghijklmnopqrst.xyz/" rel="noopener" target="_blank">骑麦兜看日落</a>
+        </li>
+      
+    </ul>
+  </div>
+
+        </div>
+      </div>
+      <!--noindex-->
+        <div class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+            
+            
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#fork入门知识"><span class="nav-number">1.</span> <span class="nav-text">fork入门知识</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#fork进阶知识"><span class="nav-number">2.</span> <span class="nav-text">fork进阶知识</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#fork高阶知识"><span class="nav-number">3.</span> <span class="nav-text">fork高阶知识</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#fork-父子进程变量的关系"><span class="nav-number">3.1.</span> <span class="nav-text">fork()父子进程变量的关系</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </div>
+      <!--/noindex-->
+      
+        <div class="back-to-top motion-element">
+          <i class="fa fa-arrow-up"></i>
+          
+            <span id="scrollpercent"><span>0</span>%</span>
+          
+        </div>
+      
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">0xE4s0n</span>
+</div>
+
+<div id="days"></div>
+<script>
+function show_date_time(){
+    window.setTimeout("show_date_time()", 1000);
+    BirthDay=new Date("06/17/2019 15:13:14");//修改为自己的blog建站时间
+    today=new Date();
+    timeold=(today.getTime()-BirthDay.getTime());
+    sectimeold=timeold/1000
+    secondsold=Math.floor(sectimeold);
+    msPerDay=24*60*60*1000
+    e_daysold=timeold/msPerDay
+    daysold=Math.floor(e_daysold);
+    e_hrsold=(e_daysold-daysold)*24;
+    hrsold=setzero(Math.floor(e_hrsold));
+    e_minsold=(e_hrsold-hrsold)*60;
+    minsold=setzero(Math.floor((e_hrsold-hrsold)*60));
+    seconds=setzero(Math.floor((e_minsold-minsold)*60));
+    document.getElementById('days').innerHTML="已运行"+daysold+"天"+hrsold+"小时"+minsold+"分"+seconds+"秒";
+}
+function setzero(i){
+    if (i<10)
+    {i="0" + i};
+    return i;
+}
+show_date_time();
+</script>
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-user"></i>
+    </span>
+    <span class="site-uv" title="总访客量">
+      访客：<span class="busuanzi-value" id="busuanzi_value_site_uv"></span>
+    </span>
+  
+    <span class="post-meta-divider">|</span>
+  
+    <span class="post-meta-item-icon">
+      <i class="fa fa-eye"></i>
+    </span>
+    <span class="site-pv" title="总访问量">
+      浏览次数：<span class="busuanzi-value" id="busuanzi_value_site_pv"></span>
+    </span>
+  
+</div>
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+
+  </div>
+
+  
+    
+    
+  
+    
+    
+      
+    
+  
+  <script color='0,0,255' opacity='0.5' zIndex='-1' count='99' src="//cdn.bootcss.com/canvas-nest.js/1.0.1/canvas-nest.min.js"></script>
+  <script src="//cdn.jsdelivr.net/jquery/2.1.3/jquery.min.js"></script>
+  <script src="//cdn.jsdelivr.net/fancybox/2.1.5/jquery.fancybox.pack.js"></script>
+  <script defer src="/lib/three/three.min.js"></script>
+  <script defer src="/lib/three/canvas_sphere.min.js"></script>
+
+  <script src="/js/utils.js?v=7.2.0"></script>
+
+  
+  <script src="/js/affix.js?v=7.2.0"></script>
+  <script src="/js/schemes/pisces.js?v=7.2.0"></script>
+
+
+  
+  <script src="/js/scrollspy.js?v=7.2.0"></script>
+<script src="/js/post-details.js?v=7.2.0"></script>
+
+
+
+  <script src="/js/next-boot.js?v=7.2.0"></script>
+
+  
+
+  
+
+  
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    
+<script src="//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js"></script>
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.css">
+<script src="//cdn.jsdelivr.net/npm/js-md5@0.7.3/src/md5.min.js"></script>
+
+<script>
+  var gitalk = new Gitalk({
+    clientID: '20a66d45deddc86a7b8f',
+    clientSecret: 'e7f74883281913b8ce00b761fcd7b79f844e4d4d',
+    repo: '0xE4s0n.github.io',
+    owner: '0xE4s0n',
+    admin: ['0xE4s0n'],
+    id: md5(location.pathname),
+      language: 'zh-CN',
+    
+    distractionFreeMode: 'true'
+  });
+  gitalk.render('gitalk-container');
+</script>
+
+<script src="/live2d-widget/autoload.js"></script>
+</body>
+</html>
