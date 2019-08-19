@@ -72,7 +72,7 @@
 <meta property="og:site_name" content="0xE4s0n的博客">
 <meta property="og:description" content="Smali背景　　Smali，Baksmali分别是指安卓系统里的Java虚拟机（Dalvik）所使用的一种.dex格式文件的汇编器，反汇编器。其语法是一种宽松式的Jasmin/dedexer语法，而且它实现了.dex格式所有功能（注解，调试信息，线路信息等）。　　Smali，Baksmali分别是冰岛语中编译器，反编译器的叫法。也许你会问为什么是冰岛语呢，因为Dalvik是一个冰岛渔村名字。 简">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2019-08-12T08:52:38.182Z">
+<meta property="og:updated_time" content="2019-08-19T11:58:22.976Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="smail语法">
 <meta name="twitter:description" content="Smali背景　　Smali，Baksmali分别是指安卓系统里的Java虚拟机（Dalvik）所使用的一种.dex格式文件的汇编器，反汇编器。其语法是一种宽松式的Jasmin/dedexer语法，而且它实现了.dex格式所有功能（注解，调试信息，线路信息等）。　　Smali，Baksmali分别是冰岛语中编译器，反编译器的叫法。也许你会问为什么是冰岛语呢，因为Dalvik是一个冰岛渔村名字。 简">
@@ -290,7 +290,7 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2019-08-12 16:52:38" itemprop="dateModified" datetime="2019-08-12T16:52:38+08:00">2019-08-12</time>
+                <time title="修改时间：2019-08-19 19:58:22" itemprop="dateModified" datetime="2019-08-19T19:58:22+08:00">2019-08-19</time>
               </span>
             
           
@@ -427,7 +427,18 @@
 <td>第三个parameter register</td>
 </tr>
 </tbody></table>
-<h2 id="寄存器的命名"><a href="#寄存器的命名" class="headerlink" title="寄存器的命名"></a>寄存器的命名</h2><pre><code>.local vA, &quot;name&quot;:@type;</code></pre><p>将VA命名为name name为type类型;<br>registers待求证</p>
+<h2 id="寄存器的命名"><a href="#寄存器的命名" class="headerlink" title="寄存器的命名"></a>寄存器的命名</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">.local vA, &quot;name&quot;:type;</span><br></pre></td></tr></table></figure>
+
+<p>将vA命名为name name为type类型;<br>例如:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">.local v0, &quot;bu&quot;:Landroid/widget/Button;</span><br></pre></td></tr></table></figure>
+
+<p>v0 相当于  Button bu;</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">.param pA, &quot;name&quot;  # type;</span><br></pre></td></tr></table></figure>
+
+<p>将pA命名为name name 为type类型;<br>例如</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">.param p1, &quot;a&quot;  # I</span><br></pre></td></tr></table></figure>
+
+<p>p1 相当于  int a;</p>
 <h1 id="Dalvik指令集"><a href="#Dalvik指令集" class="headerlink" title="Dalvik指令集"></a>Dalvik指令集</h1><p><strong><a href="https://source.android.com/devices/tech/dalvik/dalvik-bytecode#instructions," title="官方Dalvik文档" target="_blank" rel="noopener">https://source.android.com/devices/tech/dalvik/dalvik-bytecode#instructions</a></strong><br><strong>以下寄存器的位数与指令注意事项可在官方文档中查看</strong></p>
 <p>一般的指令格式为：<code>[op]-[type](可选)/[位宽，默认4位] [目标寄存器],[源寄存器](可选)</code>，比如：<code>move v1,v2</code>，<code>move-wide/from16 v1,v2</code></p>
 <h2 id="移位"><a href="#移位" class="headerlink" title="移位"></a>移位</h2><table>
