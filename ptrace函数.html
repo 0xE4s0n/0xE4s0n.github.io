@@ -68,7 +68,7 @@
 <meta name="keywords" content="C,hook">
 <meta property="og:type" content="article">
 <meta property="og:title" content="ptrace函数">
-<meta property="og:url" content="http://yoursite.com/2019/08/14/ptrace函数/index.html">
+<meta property="og:url" content="http://0xe4s0n.github.io/ptrace函数.html">
 <meta property="og:site_name" content="0xE4s0n的博客">
 <meta property="og:description" content="ptrace 函数简介函数原型123#include &amp;lt;sys/ptrace.h&amp;gt;long ptrace（enum _ptrace_request request,pid_t pid,void * addr ,void *data）;  参数意义 request：请求ptrace执行的操作  pid：目标进程的ID  addr：目标进程的地址  data：根据request的不同而变化">
 <meta property="og:locale" content="zh-CN">
@@ -89,7 +89,7 @@
 <meta name="twitter:title" content="ptrace函数">
 <meta name="twitter:description" content="ptrace 函数简介函数原型123#include &amp;lt;sys/ptrace.h&amp;gt;long ptrace（enum _ptrace_request request,pid_t pid,void * addr ,void *data）;  参数意义 request：请求ptrace执行的操作  pid：目标进程的ID  addr：目标进程的地址  data：根据request的不同而变化">
 <meta name="twitter:image" content="https://i.loli.net/2019/08/14/KtmlU61q5J4OPz7.png">
-  <link rel="canonical" href="http://yoursite.com/2019/08/14/ptrace函数/">
+  <link rel="canonical" href="http://0xe4s0n.github.io/ptrace函数">
 
 
 <script id="page.configurations">
@@ -256,7 +256,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/08/14/ptrace函数/">
+    <link itemprop="mainEntityOfPage" href="http://0xe4s0n.github.io/ptrace函数.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="0xE4s0n">
@@ -270,11 +270,11 @@
       <header class="post-header">
 
         
-          <h1 class="post-title" itemprop="name headline">ptrace函数
+          <h2 class="post-title" itemprop="name headline">ptrace函数
 
               
             
-          </h1>
+          </h2>
         
 
         <div class="post-meta">
@@ -357,7 +357,7 @@
 </ul>
 <p><code>request</code>参数决定<code>ptrace</code>的行为以及后续的参数是如何被使用的，参数<code>request</code>的常用的值如下：<br><img src="https://i.loli.net/2019/08/14/KtmlU61q5J4OPz7.png" alt>  </p>
 <blockquote>
-<p>更多参数请移步<a href="http://man7.org/linux/man-pages/man2/ptrace.2.html" target="_blank" rel="noopener">官方文档</a>　　 参数对应值参考<code>/usr/include/linux/ptrace.h</code><a href="https://0xe4s0n.github.io/download/De1ctf/ptrace.h" target="_blank" rel="noopener">源码</a>  </p>
+<p>更多参数请移步<a href="http://man7.org/linux/man-pages/man2/ptrace.2.html" target="_blank" rel="noopener">官方文档</a>　　 参数对应值参考<code>/usr/include/linux/ptrace.h</code><a href="https://0xe4s0n.github.io/download/De1ctf/ptrace.h">源码</a>  </p>
 </blockquote>
 <h2 id="描述"><a href="#描述" class="headerlink" title="描述"></a>描述</h2><p>&emsp;&emsp;<code>ptrace()</code>系统调用函数提供了一个进程（<code>the “tracer”</code><em>监视者</em>）监察和控制另一个进程（<code>the “tracee”</code><em>被监视者</em>）的方法。并且可以检查和改变<code>tracee</code>进程的内存和寄存器里的数据。它可以用来实现断点调试和系统调用跟踪。<br>&emsp;&emsp;<code>tracee</code>首先需要被附着到<code>tracer</code>。在多线程进程中，每个线程都可以被附着到一个<code>tracer</code>。<code>ptrace</code>命令总是以<code>ptrace(PTARCE_foo,pid,..)</code>的形式发送到<code>tracee</code>进程。<code>pid</code>是<code>tracee</code>线程<code>ID</code>。<br>&emsp;&emsp;一个进程可以通过调用<code>fork</code>函数创建子进程并让子进程执行<code>PTRACE_TRACEME</code>来初始化一个<code>ptrace</code>,然后通常子进程再调用<code>execve()</code>（如果当前进程被<code>ptrace</code>,<code>execve()</code>成功执行后 <code>SIGTRAP</code>信号量会被发送到当前进程）。一个进程也可以使用<code>PTRACE_ATTACH</code>或者<code>PTRACE_SEIZE</code>来跟踪另一个进程。<br>&emsp;&emsp;当进程被跟踪后，每当信号量传给当前进程，甚至信号量被忽略时，<code>tracee</code>会暂停(<code>SIGKILL</code>除外)。<code>tracer</code>会在下次调用<code>waitpid</code>(或者其它<code>wait</code>系统调用)处被通知。该调用会返回一个包含<code>tracee</code>暂停原因信息的状态码。当<code>tracee</code>暂停后，<code>tracer</code>可以使用一系列<code>ptrace</code>请求来查看和修改<code>tracee</code>中的信息。<code>tracer</code>接着可以让<code>tracee</code>继续执行。<code>tracee</code>传递给<code>tracer</code>中的信号量通常被忽略(即使是一个不同的信号）。<br>　　当<code>PTRACE_O_TRACEEXEC</code>项未起作用时，所有成功执行<code>execve()</code>的<code>tracee</code>进程会被发送一个 <code>SIGTRAP</code>信号量后暂停，在新程序执行之前，父进程将会取得该进程的控制权。<br>　　当<code>tracer</code>结束跟踪后，可以通过调用<code>PTRACE_DETACH</code>让<code>tracee</code>在未被<code>trace</code>下继续执行。</p>
 <p>　　那么，<code>ptrace</code>会在什么时候出现呢？在执行系统调用之前，内核会先检查当前进程是否处于被“跟踪”(<code>traced</code>)的状态。如果是的话，内核暂停当前进程并将控制权交给跟踪进程，使跟踪进程得以察看或者修改被跟踪进程的寄存器。</p>
@@ -376,10 +376,10 @@
 
 <p>使用<code>gcc</code>编译该文件<code>gcc ptrace.c -o ptrace</code> 然后运行<br><img src="https://i.loli.net/2019/08/14/YQjikwv1FcmyVWH.png" alt><br><code>ptrcer</code>通过<code>PTRACE_PEEKUSER</code>访问<code>user</code>结构体读取<code>RAX</code>的值  第二个参数指定<code>RAX</code>在<code>user</code>中的偏移量。<br><img src="https://i.loli.net/2019/08/14/4YGNst38d2kwX7M.png" alt></p>
 <blockquote>
-<p>在<code>reg.h</code>中定义了各个变量在<code>user.h</code>中的偏移量,<br><code>/usr/include/x86_64-linux-gnu/reg.h</code><a href="https://0xe4s0n.github.io/download/De1ctf/reg.h" target="_blank" rel="noopener">源码</a><br><code>/usr/include/x86_64-linux-gnu/user.h</code><a href="https://0xe4s0n.github.io/download/De1ctf/user.h" target="_blank" rel="noopener">源码</a></p>
+<p>在<code>reg.h</code>中定义了各个变量在<code>user.h</code>中的偏移量,<br><code>/usr/include/x86_64-linux-gnu/reg.h</code><a href="https://0xe4s0n.github.io/download/De1ctf/reg.h">源码</a><br><code>/usr/include/x86_64-linux-gnu/user.h</code><a href="https://0xe4s0n.github.io/download/De1ctf/user.h">源码</a></p>
 </blockquote>
 <blockquote>
-<p>59是<code>execve</code>的系统调用号，这是该程序调用的第一个系统调用。系统调用号的详细内容，<br>64位linux请察看 <a href="https://0xe4s0n.github.io/download/De1ctf/unistd_64.h" target="_blank" rel="noopener">/usr/include/x86_64-linux-gnu/asm/unistd_64.h</a><br>32位linux请察看 <a href="https://0xe4s0n.github.io/download/De1ctf/unistd_32.h" target="_blank" rel="noopener">/usr/include/i386-linux-gnu/asm/unistd_32.h</a></p>
+<p>59是<code>execve</code>的系统调用号，这是该程序调用的第一个系统调用。系统调用号的详细内容，<br>64位linux请察看 <a href="https://0xe4s0n.github.io/download/De1ctf/unistd_64.h">/usr/include/x86_64-linux-gnu/asm/unistd_64.h</a><br>32位linux请察看 <a href="https://0xe4s0n.github.io/download/De1ctf/unistd_32.h">/usr/include/i386-linux-gnu/asm/unistd_32.h</a></p>
 </blockquote>
 <p>&emsp;&emsp;<code>execl()</code>函数对应的系统调用为<code>__NR_execve</code>，系统调用值为<code>59</code>。父进程通过调用<code>fork()</code>来创建子进程。在子进程中，先运行<code>patrce()</code>.请求参数设为<code>PTRACE_TRACE</code>,来告诉内核当前进程被父进程<code>trace</code>，每当有信号量传递到当前进程，该进程会暂停，提醒父进程在<code>wait()</code>调用处继续执行。然后再调用<code>execl()</code>。当<code>execl()</code>函数成功执行后，继续运行之前，<code>SIGTRAP</code>信号量会被发送到该进程，让子进程停止，这时父进程会在<code>wait</code>相关调用处被通知，获取子进程的控制权，可以查看子进程内存和寄存器相关信息。当检查完系统调用之后，调用ptrace并设置参数PTRACE_CONT让子进程继续进行。</p>
 <h2 id="读取系统调用参数"><a href="#读取系统调用参数" class="headerlink" title="读取系统调用参数"></a>读取系统调用参数</h2><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ptrace(PTRACE_GETREGS, child, <span class="literal">NULL</span>, &amp;regs);</span><br></pre></td></tr></table></figure>
@@ -391,7 +391,7 @@
 <p>大部分的代码还是比较好懂,部分需要说明一下</p>
 <p>对于<code>PTRACE_STSCALL</code>参数，该参数会像<code>PTRACE_CONT</code>一样使暂停的子进程继续执行，并在子进程下次进行系统调用前或系统调后，向子进程发送SINTRAP信号量，让子进程暂停。<br><img src="https://i.loli.net/2019/08/14/8zgKlcwUt1onEYJ.png" alt></p>
 <p><code>WIFEXITED</code>函数(宏)函数用来检查子进程是暂停还准备退出。</p>
-<p><code>SYS_write</code>被定义在<code>/usr/include/x86_64-linux-gnu/bits/syscall.h</code>里面<code># define SYS_write __NR_write</code>与<code>unistd.h</code>对应　　<a href="https://0xe4s0n.github.io/download/De1ctf/syscall.h" target="_blank" rel="noopener">源码</a></p>
+<p><code>SYS_write</code>被定义在<code>/usr/include/x86_64-linux-gnu/bits/syscall.h</code>里面<code># define SYS_write __NR_write</code>与<code>unistd.h</code>对应　　<a href="https://0xe4s0n.github.io/download/De1ctf/syscall.h">源码</a></p>
 <h2 id="修改子进程系统调用参数"><a href="#修改子进程系统调用参数" class="headerlink" title="修改子进程系统调用参数"></a>修改子进程系统调用参数</h2><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">val = ptrace(PTRACE_PEEKDATA,child,addr,<span class="literal">NULL</span>)</span><br><span class="line">val = ptrace(PTRACE_PEEKTEXT,child,addr,<span class="literal">NULL</span>)</span><br></pre></td></tr></table></figure>
 
 <p><img src="https://i.loli.net/2019/08/14/7du5aI6ZvnVOWDz.png" alt></p>
@@ -429,7 +429,7 @@
         </div>
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
-              <a href="/2019/08/13/fork函数/" rel="next" title="fork函数">
+              <a href="/fork函数.html" rel="next" title="fork函数">
                 <i class="fa fa-chevron-left"></i> fork函数
               </a>
             
@@ -728,6 +728,15 @@ show_date_time();
 
 
   
+  <script>
+    (function(){
+      var bp = document.createElement('script');
+      var curProtocol = window.location.protocol.split(':')[0];
+      bp.src = (curProtocol === 'https') ? 'https://zz.bdstatic.com/linksubmit/push.js' : 'http://push.zhanzhang.baidu.com/push.js';
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(bp, s);
+    })();
+  </script>
 
 
 
@@ -784,5 +793,5 @@ show_date_time();
 </script>
 
 <script src="/live2d-widget/autoload.js"></script>
-</body>
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"log":false,"pluginJsPath":"lib/","pluginModelPath":"assets/","pluginRootPath":"live2dw/","tagMode":false});</script></body>
 </html>
