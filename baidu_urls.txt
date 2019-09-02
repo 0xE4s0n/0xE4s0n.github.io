@@ -1,9 +1,2 @@
 http://0xe4s0n.github.io/ptrace函数.html
 http://0xe4s0n.github.io/fork函数.html
-http://0xe4s0n.github.io/De1ctf——Signal vm + Signal vm Δ.html
-http://0xe4s0n.github.io/De1ctf——evil-boost.html
-http://0xe4s0n.github.io/2019暑假任务———Encoder.html
-http://0xe4s0n.github.io/建站辛酸.html
-http://0xe4s0n.github.io/2019暑假任务———CTF-GAME.html
-http://0xe4s0n.github.io/smali语法.html
-http://0xe4s0n.github.io/抽象类和接口的区别.html
